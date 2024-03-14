@@ -4,6 +4,7 @@
 <script defer src="add_workout.js"></script>
 <!-- <script type=module src="custom_elements.js"></script> -->
 
+<!-- use less IDs -->
 
 <header>
     <h1>Workouts</h1>
@@ -12,22 +13,38 @@
 <main>
     <section id="workouts">
     </section>
-    <button id = "addWorkout" type="button">Add Workout</button>
+    <button id="addWorkout" type="button">Add Workout</button>
     <template id="workoutPage">
-        <section id="overview"> 
-            <p>Total Time: </p> <p>0</p>
-            <p>Number of exercises: </p> <p>0</p>
-            <select name="level" id="level">
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">hard</option>
-            </select>
+        <section id = "workout">
+            <section id="overview">
+                <p>Total Time: </p>
+                <p>0</p>
+                <p>Number of exercises: </p>
+                <p>0</p>
+                <select name="level" id="level">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">hard</option>
+                </select>
+                <template id="chooseExercise">
+                    <section>
+                        <template id="exercise">
+                            <select id="exercises" name="exercises"> 
+                                <input type="radio" name="squat" value="squat" />
+                                <label for="squat">Squats</label>
+                                <p>description</p>
+                            </select>
+                        </template>
+                    </section>
+                </template>
+            </section>
+            <!-- add Exercise button -->
+            <button id="addExercise" type="button">Add Exercise</button>
+            <!-- add rest button -->
+            <button id="addRest" type="button">Add Rest</button>
+            <!-- save button -->
+            <button id="saveWorkout" type="button">Save</button>
+            <button id="cancelWorkout" type="button">Cancel</button>
         </section>
-        <!-- add Exercise button -->
-        <button id = "addExercise" type="button">Add Exercise</button>
-        <!-- add rest button -->
-        <button id = "addRest" type="button">Add Rest</button>
-        <!-- save button -->
-        <button id = "saveWorkout" type="button">Save</button>
     </template>
 </main>
