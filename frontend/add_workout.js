@@ -6,13 +6,23 @@ const workoutPage = document.querySelector('#workoutPage');
 
 const workoutList = document.querySelector("#workouts");
 
-function addNewExercise(e) {
-    const exercise = document.querySelector("#exercise");
+function addNewExercise() {
+    const exName = document.querySelector("#exercise");
     const description = document.querySelector("#description");
     const timeInput = document.querySelector("time-setter");
     const exInfo = document.querySelector("#infoInput");
     const addExercise = document.querySelector("#addExercise");
-    if ((exercise.value).trim()  != "" && (description.value).trim()  != "" && timeInput.time != 0) {
+    const exercises = document.querySelector("#exercises");
+    if ((exName.value).trim()  != "" && (description.value).trim()  != "" && timeInput.time != 0) {
+        const exercise = document.createElement("section");
+        const ex = document.createElement("p");
+        ex.textContent = (exName.value).trim();
+        const desc = document.createElement("p");
+        desc.textContent = (description.value).trim();
+        const time = document.createElement("p");
+        time.textContent = timeInput.time;
+        exercise.append(ex,desc,time);
+        exercises.append(exercise);
         exInfo.remove();
         addExercise.disabled = false;
     }
@@ -25,6 +35,9 @@ function loadExerciseInputs(e) {
     overview.append(cloned);
     e.target.disabled = true;
     const send = document.querySelector('#send');
+    const exInfo = document.querySelector("#infoInput");
+    const cancel = document.querySelector('#cancelExercise');
+    cancel.addEventListener("click", () => {exInfo.remove(), e.target.disabled = false;});
     send.addEventListener("click", addNewExercise);   
 }
 
