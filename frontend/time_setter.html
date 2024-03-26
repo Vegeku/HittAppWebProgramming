@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>Set Timer</title>
+<script defer src="custom_elements.js"></script>
+
+<template id = "timer">
+    <input id="time" type=text autofocus autocomplete=off placeholder='in number format' value='0' disabled="true">
+    <input type="range" id="setTime" name="volume" min="0" max="90" step = "1" value='0'/>
+
+    <ol>
+        <button>0</button>
+        <button>30</button>
+        <button>60</button>
+        <button>90</button>
+    </ol>
+</template>
