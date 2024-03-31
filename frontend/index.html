@@ -1,8 +1,8 @@
 <!doctype html>
 <meta charset=utf-8>
 <title>Fitness HITT App</title>
-<script defer src="add_workout.js"></script>
-<script type=module src="time_setter.js"></script>
+<script defer src="index.js"></script>
+<script type=module src="componenets/time_setter.js"></script>
 
 <!-- use less IDs -->
 
@@ -17,10 +17,10 @@
     <template id="workoutPage">
         <section id = "workout">
             <section id="overview">
-                <p>Total Time: </p>
-                <p>0</p>
+                <p>Total Time (in seconds): </p>
+                <p id="totalTime">0</p>
                 <p>Number of exercises: </p>
-                <p>0</p>
+                <p id="numberOfexercises">0</p>
                 <!-- make this a custom element -->
                 <select name="level" id="level">
                     <option value="easy">Easy</option>
@@ -36,6 +36,13 @@
                         <time-setter time="0"></time-setter>
                         <input id=send type=submit value=Add>
                         <button id="cancelExercise" type="button">Cancel</button>
+                    </section>
+                </template>
+                <template id="setRest">
+                    <section id='infoRestInput'>
+                        <time-setter time="0"></time-setter>
+                        <input id=sendRest type=submit value=Add>
+                        <button id="cancelRest" type="button">Cancel</button>
                     </section>
                 </template>
             </section>
