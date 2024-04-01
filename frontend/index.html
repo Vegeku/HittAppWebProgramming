@@ -3,6 +3,7 @@
 <title>Fitness HITT App</title>
 <script defer src="index.js"></script>
 <script type=module src="componenets/time_setter.js"></script>
+<script type=module src="componenets/workout_card.js"></script>
 
 <!-- use less IDs -->
 
@@ -11,8 +12,9 @@
 </header>
 
 <main>
-    <section id="workouts">
-    </section>
+    <ul id="workouts">
+    <li>No workouts</li>
+    </ul>
     <button id="addWorkout" type="button">Add Workout</button>
     <template id="workoutPage">
         <section id = "workout">

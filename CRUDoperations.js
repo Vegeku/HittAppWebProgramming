@@ -29,13 +29,14 @@ export async function deleteWorkout(id) {
   return db.run('DELETE FROM Workout WHERE id = ?', id);
 }
 
-export async function addWorkout(name,level,exercises) {
+export async function addWorkout(name,level,duration,exercises) {
   if (name.trim() === '' && level.trim() === '' && exercises == []) return listWorkout();
   const db = await dbConn;
   const id = uuid();
   const n = name;
-  const listofExercises = `${{exercises: exercises}}`;
-  await db.run('INSERT INTO Workout VALUES (?, ? , ?, ?)', [id, n, level, listofExercises]);
+  const d = parseInt(duration);
+  const listofExercises = `{"exercises": [${exercises.toString()}]}`;
+  await db.run('INSERT INTO Workout VALUES (?, ?, ? , ?, ?)', [id, n, level,duration, listofExercises]);
 
   return listWorkout();
 }
@@ -45,9 +46,10 @@ export async function editWorkout(id, updatedWorkout) {
 
   const name = updatedWorkout.name;
   const level = updatedWorkout.level;
+  const duration = updatedWorkout.duration;
   const exercises = updatedWorkout.exercises;
 
-  const statement = await db.run('UPDATE Workout SET name = ? ,description = ? , duration = ? WHERE id = ?', [name, level, exercises, id]);
+  const statement = await db.run('UPDATE Workout SET name = ? ,level = ? , duration = ?, exercises = ? WHERE id = ?', [name, level,duration , exercises, id]);
 
   // if nothing was updated, the ID doesn't exist
   if (statement.changes === 0) throw new Error('Workout not found');

@@ -22,7 +22,7 @@ async function getWorkout(req, res) {
 }
 
 async function postWorkout(req, res) {
-    const workout = await w.addWorkout(req.body.name, req.body.level, req.body.exercises);
+    const workout = await w.addWorkout(req.body.name, req.body.level, req.body.duration, req.body.exercises);
     res.json(workout);
 }
 
@@ -35,7 +35,7 @@ async function deleteWorkout(req, res) {
     res.json(await w.deleteWorkout(req.params.id));
 }
 
-app.get('/workout', getWorkouts);
+app.get('/workouts', getWorkouts);
 app.get('/workout/:id', getWorkout);
 app.delete('/workout/:id', deleteWorkout);
 app.put('/workout/:id', express.json(), putWorkout);
