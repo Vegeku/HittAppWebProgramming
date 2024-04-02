@@ -42,18 +42,20 @@ export class WorkoutCard extends HTMLElement {
         start.addEventListener('click', this.startWorkout.bind(this));
         duration.textContent = this.duration;
         level.textContent = this.level;
+        const del = this.shadow.querySelector('#delete');
+        del.addEventListener('click',this.delete.bind(this));
     }
-    
+
     async startWorkout() {
         const response = await fetch(this.url);
         const values = await response.json();
         console.log(values);
-        sessionStorage.setItem('exercises',values.exercises);
-        sessionStorage.setItem('totalTime',values.duration);
+        sessionStorage.setItem('exercises', values.exercises);
+        sessionStorage.setItem('totalTime', values.duration);
 
         window.location.href = "startWorkout.html"
     }
-    
+
 
     /**
      * Show the UI for when the EM is in 'edit mode'
@@ -115,23 +117,24 @@ export class WorkoutCard extends HTMLElement {
      * The URL for the fetch request comes from the
      * URL attribute of this custom element
      */
-    async save() {
-        const method = 'PUT';
+    async delete() {
+        // const exercise = this.shadow.querySelector('.editable-exercise');
+        // exercise.replaceChildren();
+        // exercise.remove();
+        this.parentElement.remove();
+        this.remove();
+        const method = 'DELETE';
         const headers = { 'Content-Type': 'application/json' };
-        const name = this.shadow.querySelector('#exercise').value;
-        const description = this.shadow.querySelector('#description').value;
-        const duration = this.shadow.querySelector('set-timer').time;
-        const body = JSON.stringify({ name, description, duration });
+        const name = this.shadow.querySelector('h4').textContent;
+        const body = JSON.stringify({ name });
         const options = { method, headers, body };
         const response = await fetch(this.url, options);
-        if (response.ok) {
-            this.textContent = name;
-            this.desc = description;
-            this.time = duration;
-            this.showReadonly();
-        } else {
-            console.error('Failed to save exercise');
-        }
+        // console.log(response);
+        // if (response.ok) {
+        //   // this.showReadonly();
+        // } else {
+        //   console.error('Failed to save exercise');
+        // }
     }
 
 }

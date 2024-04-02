@@ -14,6 +14,7 @@ async function init() {
 
 const dbConn = init();
 
+
 export async function listWorkout() {
   const db = await dbConn;
   return db.all('SELECT * FROM Workout ORDER BY level DESC');
