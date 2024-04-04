@@ -10,19 +10,19 @@ function changeExercise(current, next) {
 function changeTimer() {
     if (parseInt(el.duration.textContent) <= 0 && el.currentIndex < el.exerciseList.length - 1) {
         el.currentIndex += 1;
-        el.duration.textContent =  el.exerciseList[el.currentIndex].time;
-        el.timeLeft.textContent = parseInt(el.timeLeft.textContent) - parseInt(el.exerciseList[el.currentIndex].time);
-    }else if (parseInt(el.duration.textContent) > 0) {
+        el.duration.textContent = el.exerciseList[el.currentIndex].time;
+        el.timeLeft.textContent = parseInt(el.timeLeft.textContent) - parseInt(el.exerciseList[el.currentIndex - 1].time);
+    } else if (parseInt(el.duration.textContent) > 0) {
         el.duration.textContent = parseInt(el.duration.textContent) - 1;
     }
 
-    if (el.currentIndex+1 < el.exerciseList.length){
-        changeExercise(el.exerciseList[el.currentIndex].name, el.exerciseList[el.currentIndex+1].name);
-    } else if (el.currentIndex+1 == el.exerciseList.length) {
+    if (el.currentIndex + 1 < el.exerciseList.length) {
+        changeExercise(el.exerciseList[el.currentIndex].name, el.exerciseList[el.currentIndex + 1].name);
+    } else if (el.currentIndex + 1 == el.exerciseList.length) {
         changeExercise(el.exerciseList[el.currentIndex].name, "no more exercises left");
-    } 
+    }
 
-    if (el.currentIndex == el.exerciseList.length-1 && el.duration.textContent == 0) {
+    if (el.currentIndex == el.exerciseList.length - 1 && el.duration.textContent == 0) {
         el.currentIndex += 1;
         el.timeLeft.textContent = 0;
         stopWorkout();
@@ -34,7 +34,11 @@ function startWorkout() {
     el.currentIndex = 0;
     el.timeLeft.textContent = el.totalTime;
     el.duration.textContent = el.exerciseList[el.currentIndex].time;
-    changeExercise(el.exerciseList[el.currentIndex].name, el.exerciseList[el.currentIndex+1].name);
+    if (el.currentIndex + 1 < el.exerciseList.length) {
+        changeExercise(el.exerciseList[el.currentIndex].name, el.exerciseList[el.currentIndex + 1].name);
+    } else if (el.currentIndex + 1 == el.exerciseList.length) {
+        changeExercise(el.exerciseList[el.currentIndex].name, "no more exercises left");
+    }
     interval = setInterval(changeTimer, 1000);
 }
 
@@ -60,8 +64,8 @@ function getData() {
 }
 
 function addButtonFunctionality() {
-    el.stop.addEventListener("click",stopWorkout);
-    el.pauseOrContinue.addEventListener("click",continueAndPauseWorkout);
+    el.stop.addEventListener("click", stopWorkout);
+    el.pauseOrContinue.addEventListener("click", continueAndPauseWorkout);
 }
 
 function prepareHadlers() {
