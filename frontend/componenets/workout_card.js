@@ -32,18 +32,31 @@ export class WorkoutCard extends HTMLElement {
      */
     showReadonly() {
         this.clearShadow();
-        const readonly = this.shadow.querySelector('#workout');
+        const readonly = this.shadow.querySelector('#showWorkout');
         const clone = readonly.content.cloneNode(true);
         this.shadow.append(clone);
         const name = this.shadow.querySelector('h4');
         const duration = this.shadow.querySelector('.duration');
-        const level = this.shadow.querySelector('.level');
         const start = this.shadow.querySelector('#start');
         start.addEventListener('click', this.startWorkout.bind(this));
-        duration.textContent = this.duration;
-        level.textContent = this.level;
+        duration.textContent = this.duration; 
+        name.textContent = this.textContent;
         const del = this.shadow.querySelector('#delete');
+        const edit = this.shadow.querySelector('#edit');
         del.addEventListener('click',this.delete.bind(this));
+        edit.addEventListener('click',this.showEdit.bind(this));
+    }
+
+    showEdit() {
+        this.clearShadow();
+        const readonly = this.shadow.querySelector('#editWorkout');
+        const clone = readonly.content.cloneNode(true);
+        this.shadow.append(clone);
+        const cancel = this.shadow.querySelectorAll('button')[3];
+        const workoutName = this.shadow.querySelector('#workoutName');
+        workoutName.value = this.textContent;
+        console.log(cancel);
+        cancel.addEventListener("click", this.showReadonly.bind(this));
     }
 
     async startWorkout() {
@@ -88,17 +101,6 @@ export class WorkoutCard extends HTMLElement {
         return this.getAttribute('dbid');
     }
 
-    get level() {
-        return this.getAttribute('level');
-    }
-
-    set level(value) {
-        if (value) {
-            this.setAttribute('level', value);
-        } else {
-            this.setAttribute('level', 'Easy');
-        }
-    }
 
     get duration() {
         return this.getAttribute('dur');
@@ -112,15 +114,8 @@ export class WorkoutCard extends HTMLElement {
         }
     }
 
-    /**
-     * Send a PUT request to the server with the new exercise.
-     * The URL for the fetch request comes from the
-     * URL attribute of this custom element
-     */
+
     async delete() {
-        // const exercise = this.shadow.querySelector('.editable-exercise');
-        // exercise.replaceChildren();
-        // exercise.remove();
         this.parentElement.remove();
         this.remove();
         const method = 'DELETE';
@@ -128,13 +123,19 @@ export class WorkoutCard extends HTMLElement {
         const name = this.shadow.querySelector('h4').textContent;
         const body = JSON.stringify({ name });
         const options = { method, headers, body };
-        const response = await fetch(this.url, options);
-        // console.log(response);
-        // if (response.ok) {
-        //   // this.showReadonly();
-        // } else {
-        //   console.error('Failed to save exercise');
-        // }
+        await fetch(this.url, options);
+    }
+
+    /**
+     * Need to modify that
+     */
+    async save() {
+        const method = 'DELETE';
+        const headers = { 'Content-Type': 'application/json' };
+        const name = this.shadow.querySelector('h4').textContent;
+        const body = JSON.stringify({ name });
+        const options = { method, headers, body };
+        await fetch(this.url, options);
     }
 
 }

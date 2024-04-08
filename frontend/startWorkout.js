@@ -1,4 +1,4 @@
-el = {}
+let el = {}
 
 let interval;
 
@@ -27,7 +27,6 @@ function changeTimer() {
         el.timeLeft.textContent = 0;
         stopWorkout();
     }
-    console.log("timer is working");
 }
 
 function startWorkout() {

@@ -19,16 +19,13 @@
     <template id="workoutPage">
         <section id = "workout">
             <section id="overview">
+                <input id = "workoutName" type=text autofocus autocomplete=off placeholder='Name'>
+                <input id = "workoutDesc" type=text autofocus autocomplete=off placeholder='Description'>
                 <p>Total Time (in seconds): </p>
                 <p id="totalTime">0</p>
                 <p>Number of exercises: </p>
                 <p id="numberOfexercises">0</p>
                 <!-- make this a custom element -->
-                <select name="level" id="level">
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="hard">hard</option>
-                </select>
                 <section id="exercises">
                 </section>
                 <template id="chooseExercise">

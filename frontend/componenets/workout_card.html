@@ -4,17 +4,58 @@
 <title>Set Timer</title>
 <script defer src="time_setter.js"></script>
 
-<template id = "workout">
+<template id = "showWorkout">
     <article class="workout-item">
           <section class="item-info">
             <header>
               <h4>Grandma josephine</h4>
               <h4 class="duration">duration</h4>
             </header>
-            <p class="level">hard</p>
           </section>
           <button id="start">Start</button>
           <!-- <a id="start" role="button" href="/startWorkout.html">Start</a> -->
           <button id="delete">Delete</button>
+          <button id="edit">Edit</button>
+          <button id="edit">View</button>
     </article>
+</template>
+
+
+<template id="editWorkout">
+  <article class="workout-item">
+      <form id="overview">
+          <input id = "workoutName" type=text autofocus autocomplete=off placeholder='Name'>
+          <input type=text autofocus autocomplete=off placeholder='Description'>
+          <p>Total Time (in seconds): </p>
+          <p id="totalTime">0</p>
+          <p>Number of exercises: </p>
+          <p id="numberOfexercises">0</p>
+          <!-- make this a custom element -->
+          <section id="exercises">
+          </section>
+          <!-- <template id="chooseExercise">
+              <section id='infoInput'>
+                  <input id=exercise type=text autofocus autocomplete=off placeholder='Add a exercise here…'>
+                  <input id=description type=text autofocus autocomplete=off placeholder='Add a description here…'>
+                  <time-setter time="0"></time-setter>
+                  <input id=send type=submit value=Add>
+                  <button id="cancelExercise" type="button">Cancel</button>
+              </section>
+          </template>
+          <template id="setRest">
+              <section id='infoRestInput'>
+                  <time-setter time="0"></time-setter>
+                  <input id=sendRest type=submit value=Add>
+                  <button id="cancelRest" type="button">Cancel</button>
+              </section>
+          </template> -->
+        </form>
+      <!-- add Exercise button -->
+      <button type="button">Add Exercise</button>
+      <!-- add rest button -->
+      <button type="button">Add Rest</button>
+      <!-- save button -->
+      <button type="button">Save</button>
+      <button type="button">Cancel</button>
+  </article>
 </template>

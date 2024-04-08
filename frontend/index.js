@@ -1,11 +1,7 @@
 "use strict";
 
 
-const addWorkoutBtn = document.querySelector('#addWorkout');
-
-const workoutPage = document.querySelector('#workoutPage');
-
-const workoutList = document.querySelector("#workouts");
+let el = {};
 
 let listofExercises = { exercises: [] };
 
@@ -16,7 +12,6 @@ function showWorkouts(workouts, where) {
 
         const em = document.createElement('workout-card');
         em.textContent = workout.name;
-        em.level = workout.level;
         em.duration = workout.duration;
         em.url = `./workout/${workout.id}`;
 
@@ -34,18 +29,16 @@ async function loadWorkouts() {
     } else {
         workouts = [{ exercise: 'failed to load exercises :-(' }];
     }
-    const workoutsList = document.querySelector("#workouts");
-    workoutList.replaceChildren();
-    showWorkouts(workouts,workoutsList);
+    el.workoutList.replaceChildren();
+    showWorkouts(workouts,el.workoutList);
 }
 
 async function addWorkoutToServer() {
-    const level = document.querySelector('#level');
     const duration = document.querySelector('#totalTime');
-    console.log(duration.textContent);
-    if (listofExercises.exercises != []) {
-        console.log(listofExercises.exercises);
-        const payload = { name: "workout", level: level.value, duration: parseInt(duration.textContent), exercises: listofExercises.exercises }
+    const workoutName = document.querySelector('#workoutName');
+    const workoutDesc = document.querySelector('#workoutDesc');
+    if (listofExercises.exercises.length != 0 && (workoutName.value).trim() && (workoutDesc.value).trim() ) {
+        const payload = { name: (workoutName.value).trim(),description: (workoutDesc.value).trim() , duration: parseInt(duration.textContent), exercises: listofExercises.exercises };
 
         const response = await fetch('workout', {
             method: 'POST',
@@ -56,11 +49,8 @@ async function addWorkoutToServer() {
         if (response.ok) {
             removeWorkoutInput();
             const workoutsList = await response.json();
-            console.log(workoutsList)
-            const workouts = document.querySelector("#workouts");
-            const updatedWorkouts = document.querySelector("#workouts");
-            updatedWorkouts.replaceChildren();
-            showWorkouts(workoutsList, workouts);
+            el.workoutList.replaceChildren();
+            showWorkouts(workoutsList, el.workoutList);
         }
     }
 }
@@ -69,21 +59,23 @@ function addNewRest() {
     const timeInput = document.querySelector("time-setter");
     const exercises = document.querySelector("#exercises");
     const totalTime = document.querySelector("#totalTime");
-    const addRest = document.querySelector("#addRest");
-    const addExercise = document.querySelector("#addExercise");
-    if (timeInput.time != 0) {
-        const restInfo = document.querySelector('#infoRestInput');
-        totalTime.textContent = parseInt(totalTime.textContent) + parseInt(timeInput.time);
-        const newRest = document.createElement("section");
-        const time = document.createElement("p");
-        const restLabel = document.createElement("p");
-        restLabel.textContent = "Rest: ";
-        time.textContent = timeInput.time;
-        newRest.append(restLabel, time);
-        exercises.append(newRest);
-        restInfo.remove();
-        addExercise.disabled = false;
-        addRest.disabled = false;
+    if (timeInput.time != 0 && listofExercises.exercises.length != 0) {
+        if (JSON.parse(listofExercises.exercises[listofExercises.exercises.length - 1]).name != "Rest") {
+            console.log(JSON.parse(listofExercises.exercises[listofExercises.exercises.length - 1]).name);
+            totalTime.textContent = parseInt(totalTime.textContent) + parseInt(timeInput.time);
+            const newRest = document.createElement("section");
+            const time = document.createElement("p");
+            const restLabel = document.createElement("p");
+            restLabel.textContent = "Rest: ";
+            time.textContent = timeInput.time;
+            const payload = {name: "Rest", desc: "relax", time: timeInput.time};
+            listofExercises.exercises.push(JSON.stringify(payload));
+            newRest.append(restLabel, time);
+            exercises.append(newRest);
+            el.rest.remove();
+            el.addExercise.disabled = false;
+            el.addRest.disabled = false;
+        }
     }
 }
 
@@ -92,11 +84,9 @@ function addNewExercise() {
     const description = document.querySelector("#description");
     const timeInput = document.querySelector("time-setter");
     const exInfo = document.querySelector("#infoInput");
-    const addExercise = document.querySelector("#addExercise");
     const exercises = document.querySelector("#exercises");
     const numberOfExercises = document.querySelector("#numberOfexercises");
     const totalTime = document.querySelector("#totalTime");
-    const addRest = document.querySelector("#addRest");
     if ((exName.value).trim() != "" && (description.value).trim() != "" && timeInput.time != 0) {
         const payload = { name: (exName.value).trim(), desc: (description.value).trim(), time: timeInput.time };
         numberOfExercises.textContent = parseInt(numberOfExercises.textContent) + 1;
@@ -111,43 +101,39 @@ function addNewExercise() {
         exercise.append(ex, desc, time);
         exercises.append(exercise);
         exInfo.remove();
-        addExercise.disabled = false;
-        addRest.disabled = false;
+        el.addExercise.disabled = false;
+        el.addRest.disabled = false;
         listofExercises.exercises.push(JSON.stringify(payload));
-        console.log(listofExercises);
     }
 }
 
 function loadExerciseInputs(e) {
-    const overview = document.querySelector('#overview');
+    el.overview = document.querySelector('#overview');
     const exercisePage = document.querySelector('#chooseExercise');
-    const addRest = document.querySelector("#addRest");
     const cloned = exercisePage.content.cloneNode(true);
-    overview.append(cloned);
+    el.overview.append(cloned);
     e.target.disabled = true;
     addRest.disabled = true;
     const send = document.querySelector('#send');
-    const exInfo = document.querySelector("#infoInput");
+    el.exInfo = document.querySelector("#infoInput");
     const cancel = document.querySelector('#cancelExercise');
-    cancel.addEventListener("click", () => { exInfo.remove(); e.target.disabled = false; addRest.disabled = false });
+    cancel.addEventListener("click", () => { el.exInfo.remove(); e.target.disabled = false; el.addRest.disabled = false });
     send.addEventListener("click", addNewExercise);
 }
 
 function loadRestInput(e) {
     const restInput = document.querySelector('#setRest');
-    const overview = document.querySelector('#overview');
-    const addExercise = document.querySelector("#addExercise");
     const cloned = restInput.content.cloneNode(true);
-    overview.append(cloned);
-    const rest = document.querySelector('#infoRestInput');
+    el.overview.append(cloned);
+    el.rest = document.querySelector('#infoRestInput');
     const cancel = document.querySelector('#cancelRest');
     const addRest = document.querySelector('#sendRest');
     e.target.disabled = true;
-    addExercise.disabled = true;
+    el.addExercise.disabled = true;
     cancel.addEventListener("click", () => {
-        rest.remove();
+        el.rest.remove();
         e.target.disabled = false;
-        addExercise.disabled = false;
+        el.addExercise.disabled = false;
     })
 
     addRest.addEventListener("click", addNewRest);
@@ -158,32 +144,38 @@ function removeWorkoutInput() {
     const workout = document.querySelector("#workout");
     workout.remove();
     listofExercises.exercises = [];
-    addWorkoutBtn.disabled = false;
+    el.addWorkoutBtn.disabled = false;
 }
 
 function loadWorkoutTemplate() {
     const cloned = workoutPage.content.cloneNode(true);
-    workoutList.append(cloned);
-    addWorkoutBtn.disabled = true;
-    const addExercise = document.querySelector("#addExercise");
+    el.workoutList.append(cloned);
+    el.addWorkoutBtn.disabled = true;
+    el.addExercise = document.querySelector("#addExercise");
     const cancel = document.querySelector("#cancelWorkout");
-    const workout = document.querySelector("#workout");
-    const addRest = document.querySelector("#addRest");
+    el.addRest = document.querySelector("#addRest");
     const saveWorkout = document.querySelector("#saveWorkout");
-    cancel.addEventListener("click", removeWorkoutInput)
 
-    addExercise.addEventListener("click", loadExerciseInputs);
-    addRest.addEventListener("click", loadRestInput);
+    cancel.addEventListener("click", removeWorkoutInput)
+    el.addExercise.addEventListener("click", loadExerciseInputs);
+    el.addRest.addEventListener("click", loadRestInput);
     saveWorkout.addEventListener("click", addWorkoutToServer)
 }
 
+function prepareHadlers() {
+    el.addWorkoutBtn = document.querySelector('#addWorkout');
+    el.workoutPage = document.querySelector('#workoutPage');
+    el.workoutList = document.querySelector("#workouts");
+}
+
 function home() {
+    prepareHadlers();
     loadWorkouts();
     addWorkoutToDashboard();
 }
 
 function addWorkoutToDashboard() {
-    addWorkoutBtn.addEventListener("click", loadWorkoutTemplate);
+    el.addWorkoutBtn.addEventListener("click", loadWorkoutTemplate);
 }
 
 home();

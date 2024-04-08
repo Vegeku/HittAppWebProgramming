@@ -22,7 +22,7 @@ async function getWorkout(req, res) {
 }
 
 async function postWorkout(req, res) {
-    const workout = await w.addWorkout(req.body.name, req.body.level, req.body.duration, req.body.exercises);
+    const workout = await w.addWorkout(req.body.name, req.body.description, req.body.duration, req.body.exercises);
     res.json(workout);
 }
 
