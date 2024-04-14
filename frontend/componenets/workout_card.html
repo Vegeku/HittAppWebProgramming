@@ -2,38 +2,38 @@
 <html lang="en">
 <meta charset="UTF-8">
 <title>Set Timer</title>
-<script defer src="time_setter.js"></script>
+<script defer src="workout_card.js"></script>
+<script type=module src="exercise.js"></script>
 
-<template id = "showWorkout">
-    <article class="workout-item">
-          <section class="item-info">
-            <header>
-              <h4>Grandma josephine</h4>
-              <h4 class="duration">duration</h4>
-            </header>
-          </section>
-          <button id="start">Start</button>
-          <!-- <a id="start" role="button" href="/startWorkout.html">Start</a> -->
-          <button id="delete">Delete</button>
-          <button id="edit">Edit</button>
-          <button id="edit">View</button>
-    </article>
+<template id="showWorkout">
+  <article class="workout-item">
+    <section class="item-info">
+      <header>
+        <h4>Grandma josephine</h4>
+        <h4 class="duration">duration</h4>
+      </header>
+    </section>
+    <button id="start">Start</button>
+    <button id="delete">Delete</button>
+    <button id="edit">Edit</button>
+    <button id="view">Show more</button>
+  </article>
 </template>
 
 
 <template id="editWorkout">
   <article class="workout-item">
-      <form id="overview">
-          <input id = "workoutName" type=text autofocus autocomplete=off placeholder='Name'>
-          <input type=text autofocus autocomplete=off placeholder='Description'>
-          <p>Total Time (in seconds): </p>
-          <p id="totalTime">0</p>
-          <p>Number of exercises: </p>
-          <p id="numberOfexercises">0</p>
-          <!-- make this a custom element -->
-          <section id="exercises">
-          </section>
-          <!-- <template id="chooseExercise">
+    <form id="overview">
+      <input id="workoutName" type=text autofocus autocomplete=off placeholder='Name'>
+      <input id="workoutDesc" type=text autofocus autocomplete=off placeholder='Description'>
+      <p>Total Time (in seconds): </p>
+      <p id="totalTime">0</p>
+      <p>Number of exercises: </p>
+      <p id="numberOfexercises">0</p>
+      <!-- make this a custom element -->
+      <ul>
+      </ul>
+      <!-- <template id="chooseExercise">
               <section id='infoInput'>
                   <input id=exercise type=text autofocus autocomplete=off placeholder='Add a exercise here…'>
                   <input id=description type=text autofocus autocomplete=off placeholder='Add a description here…'>
@@ -49,13 +49,13 @@
                   <button id="cancelRest" type="button">Cancel</button>
               </section>
           </template> -->
-        </form>
-      <!-- add Exercise button -->
-      <button type="button">Add Exercise</button>
-      <!-- add rest button -->
-      <button type="button">Add Rest</button>
-      <!-- save button -->
-      <button type="button">Save</button>
-      <button type="button">Cancel</button>
+    </form>
+    <!-- add Exercise button -->
+    <button type="button">Add Exercise</button>
+    <!-- add rest button -->
+    <button type="button">Add Rest</button>
+    <!-- save button -->
+    <button type="button">Save</button>
+    <button type="button">Cancel</button>
   </article>
 </template>

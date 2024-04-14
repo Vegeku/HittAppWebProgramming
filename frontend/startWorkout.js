@@ -2,6 +2,11 @@ let el = {}
 
 let interval;
 
+function buttonSoundEffect() {
+    const audio = new Audio("../audio/click_noise.mp3");
+    audio.play();
+}
+
 function changeExercise(current, next) {
     el.exercise.textContent = current;
     el.nextExercise.textContent = next;
@@ -65,13 +70,16 @@ function getData() {
 function addButtonFunctionality() {
     el.stop.addEventListener("click", stopWorkout);
     el.pauseOrContinue.addEventListener("click", continueAndPauseWorkout);
+    el.stop.addEventListener("click", buttonSoundEffect);
+    el.pauseOrContinue.addEventListener("click", buttonSoundEffect);
 }
 
 function prepareHadlers() {
     el.timeLeft = document.querySelector("h2");
-    el.exercise = document.querySelectorAll("p")[0];
-    el.duration = document.querySelectorAll("p")[1];
-    el.nextExercise = document.querySelectorAll("p")[2];
+    el.exercise = document.querySelectorAll("p")[1];
+    el.duration = document.querySelectorAll("p")[2];
+    el.nextExercise = document.querySelectorAll("p")[4];
+    console.log(document.querySelectorAll("p"));
     el.stop = document.querySelectorAll("button")[0];
     el.pauseOrContinue = document.querySelectorAll("button")[1];
 }

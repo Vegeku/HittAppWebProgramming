@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>Exercise</title>
+<script defer src="exercise.js"></script>
+<script type=module src="time_setter.js"></script>
+
+<template id="addExercise">
+    <section id='infoInput'>
+        <input id=exercise type=text autofocus autocomplete=off placeholder='Add a exercise here…'>
+        <input id=description type=text autofocus autocomplete=off placeholder='Add a description here…'>
+        <time-setter time="0"></time-setter>
+        <input id=send type=submit value=Add>
+        <button id="cancelExercise" type="button">Cancel</button>
+    </section>
+</template>
+
+<template id="showExecise">
+    <li>
+        <p>exercise</p>
+        <p>description</p>
+        <p>time</p>
+        <!-- <button>delete</button>
+        <button>edit</button> -->
+    </li>
+</template>

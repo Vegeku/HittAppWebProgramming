@@ -35,9 +35,9 @@ export class TimeSetter extends HTMLElement {
 
         const input =  this.shadow.querySelector("#setTime");
         const t = this.shadow.querySelector('#time');
-        t.value = this.time;
+        t.textContent = this.time;
         input.value = this.time;
-        input.addEventListener('change', this.slider.bind(this));
+        input.addEventListener('input', this.slider.bind(this));
 
         const buttons = this.shadow.querySelectorAll("button");
         buttons.forEach(button => {
@@ -49,18 +49,16 @@ export class TimeSetter extends HTMLElement {
         const t = this.shadow.querySelector('#time');
         const input =  this.shadow.querySelector("#setTime");
         const value = e.target.textContent;
-        t.value = value;
+        t.textContent = value;
         input.value = value;
-        this.time = t.value;
+        this.time = t.textContent;
     }
 
     slider () {
         const t = this.shadow.querySelector('#time');
         const input =  this.shadow.querySelector("#setTime");
-        t.disabled = false;
-        t.value = input.value;
-        t.disabled = true;
-        this.time = t.value;
+        t.textContent = input.value;
+        this.time = t.textContent;
     }
 
     get time() {

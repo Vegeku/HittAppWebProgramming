@@ -4,6 +4,7 @@
 <script defer src="index.js"></script>
 <script type=module src="componenets/time_setter.js"></script>
 <script type=module src="componenets/workout_card.js"></script>
+<script type=module src="componenets/exercise.js"></script>
 
 <!-- use less IDs -->
 
@@ -26,8 +27,8 @@
                 <p>Number of exercises: </p>
                 <p id="numberOfexercises">0</p>
                 <!-- make this a custom element -->
-                <section id="exercises">
-                </section>
+                <ul id="exercises">
+                </ul>
                 <template id="chooseExercise">
                     <section id='infoInput'>
                         <input id=exercise type=text autofocus autocomplete=off placeholder='Add a exercise here…'>
@@ -54,4 +55,6 @@
             <button id="cancelWorkout" type="button">Cancel</button>
         </section>
     </template>
+    <footer>
+    </footer>
 </main>
