@@ -9,53 +9,13 @@ function buttonSoundEffect() {
     const audio = new Audio("/audio/click_noise.mp3");
     audio.play();
 }
-// async function startWorkout() {
-//     const values = await this.getWorkoutData();
-//     console.log(values);
-//     sessionStorage.setItem('exercises', values.exercises);
-//     sessionStorage.setItem('totalTime', values.duration);
 
-//     window.location.href = "startWorkout.html"
-// }
-
-// async function showEdit(e) {
-//     const readonly = this.shadow.querySelector('#editWorkout');
-//     const clone = readonly.content.cloneNode(true);
-//     this.shadow.append(clone);
-//     const cancel = this.shadow.querySelectorAll('button')[3];
-//     const workoutName = this.shadow.querySelector('#workoutName');
-//     const workoutDesc = this.shadow.querySelector('#workoutDesc');
-//     const totalTime = this.shadow.querySelector('#totalTime');
-//     const numberOfExercises = this.shadow.querySelector('#numberOfexercises');
-//     const workoutData = await this.getWorkoutData();
-//     const exercises = await this.getExercises();
-//     numberOfExercises.textContent = exercises.length;
-//     totalTime.textContent = workoutData.duration;
-//     workoutDesc.value = workoutData.description;
-//     workoutName.value = this.textContent;
-//     cancel.addEventListener("click", this.showReadonly.bind(this));
-// }
 
 
 function showWorkouts(workouts, where) {
     for (const workout of workouts) {
         const li = document.createElement('li');
 
-
-        // li.id =  `./workout/${workout.id}`;
-        // const readonly = document.querySelector('#showWorkout');
-        // const clone = readonly.content.cloneNode(true);
-        // document.append(clone);
-        // const name = document.querySelector('h4');
-        // const duration = document.querySelector('.duration');
-        // const start = document.querySelector('#start');
-        // start.addEventListener('click', startWorkout);
-        // duration.textContent = workout.name;
-        // name.textContent = workout.duration;
-        // const del = document.querySelector('#delete');
-        // const edit = document.querySelector('#edit');
-        // del.addEventListener('click', deleteWorkout);
-        // edit.addEventListener('click', showEdit);
 
         const em = document.createElement('workout-card');
         em.textContent = workout.name;

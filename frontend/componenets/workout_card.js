@@ -73,7 +73,7 @@ export class WorkoutCard extends HTMLElement {
         return fullWorkout;
     }
 
-    async getExercises() {
+    getExercises() {
         const listofExercises = this.shadow.querySelector('ul');
         for (let i = 0; i < this.fullWorkout.length; i++) {
             const exerc = document.createElement('exercise-info');
@@ -81,11 +81,15 @@ export class WorkoutCard extends HTMLElement {
             exerc.desc = this.fullWorkout[i].desc;
             exerc.time = this.fullWorkout[i].time;
             exerc.index = i;
+            exerc.editable = false;
             listofExercises.append(exerc);
-            // this.shadow.append(listofExercises);
         }
         const onlyExercises = this.fullWorkout.filter((exercise) => exercise.name != 'Rest');
         return onlyExercises;
+    }
+
+    deleteExercise(e) {
+        delete this.fullWorkout[e.target.index];
     }
 
     async showEdit() {
@@ -106,10 +110,11 @@ export class WorkoutCard extends HTMLElement {
         workoutDesc.value = workoutData.description;
         workoutName.value = this.textContent;
         cancel.addEventListener("click", this.showReadonly.bind(this));
+        return this.shadow.querySelectorAll('exercise-info');
     }
 
     async showDetails() {
-        this.showEdit();
+        const exercises = await this.showEdit();
         const buttons = this.shadow.querySelectorAll('button');
         const inputs = this.shadow.querySelectorAll('input');
         inputs.forEach((input) => input.disabled = true);
@@ -117,6 +122,7 @@ export class WorkoutCard extends HTMLElement {
         for (let i = 0; i < buttons.length - 1;i++) {
             buttons[i].remove()
         }
+        exercises.forEach((exercise) => exercise.editable = "readonly");
     }
 
     async startWorkout() {
