@@ -1,0 +1,144 @@
+* {
+    text-align: center;
+    /* margin-left: auto;
+    margin-right: auto; */
+}
+
+ul {
+    list-style-type: none;
+    margin: 10;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 1em;
+}
+
+.highlight {
+    background-color: #4CAF50;
+    color: white;
+    transition: background-color 0.5s ease-in-out;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    background-color: #007bff;
+    color: white;
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+
+#workouts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(1em, 1fr));
+    gap: 10px;
+    padding: 0;
+}
+
+
+input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#send,
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:disabled {
+    background-color: #cccccc;
+    /* Gray background to show inactivity */
+    color: #666666;
+    /* Dark gray text to reduce contrast */
+    cursor: not-allowed;
+    /* Cursor indicates the button is not clickable */
+    opacity: 0.5;
+    /* Slightly transparent to show inactivity */
+}
+
+
+/* .button:hover {
+    background-color: #0056b3;
+} */
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+    background-color: #f1f1f1;
+}
+
+
+main {
+    margin: auto;
+    display: block;
+    width: 90%;
+    /* Slightly smaller width for mobile for better readability */
+    max-width: 960px;
+    /* Limiting max width for larger screens */
+}
+
+ul#workouts {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: block;
+    /* Default to block for mobile */
+}
+
+ul#workouts li {
+    background: white;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* #send, .button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block; 
+    width: 100%;
+    margin-top: 10px;
+} */
+
+/* Media query for desktops and larger screens */
+@media (min-width: 600px) {
+    ul#workouts {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+    }
+
+    #send,
+    button {
+        display: inline-block;
+        /* Allow buttons to flow in line in larger screens */
+        width: auto;
+        margin: 5px;
+    }
+}

@@ -2,9 +2,11 @@
 <meta charset=utf-8>
 <title>Fitness HITT App</title>
 <script defer src="index.js"></script>
-<script type=module src="componenets/time_setter.js"></script>
-<script type=module src="componenets/workout_card.js"></script>
-<script type=module src="componenets/exercise.js"></script>
+<script type=module src="components/time_setter.js"></script>
+<script type=module src="components/workout_card.js"></script>
+<script type=module src="components/exercise.js"></script>
+<link href="home_page.css" rel="stylesheet" type="text/css"/>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <!-- use less IDs -->
 
@@ -14,14 +16,20 @@
 
 <main>
     <ul id="workouts">
-    <li>No workouts</li>
+    <li>Welcome to the HITT workout app. 
+        To get started press the add workout button to create your own custom workout
+    </li>
     </ul>
     <button id="addWorkout" type="button">Add Workout</button>
     <template id="workoutPage">
         <section id = "workout">
             <section id="overview">
                 <input id = "workoutName" type=text autofocus autocomplete=off placeholder='Name'>
-                <input id = "workoutDesc" type=text autofocus autocomplete=off placeholder='Description'>
+                <select name="level" id="level">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">hard</option>
+                </select>
                 <p>Total Time (in seconds): </p>
                 <p id="totalTime">0</p>
                 <p>Number of exercises: </p>
@@ -34,7 +42,7 @@
                         <input id=exercise type=text autofocus autocomplete=off placeholder='Add a exercise here…'>
                         <input id=description type=text autofocus autocomplete=off placeholder='Add a description here…'>
                         <time-setter time="0"></time-setter>
-                        <input id=send type=submit value=Add>
+                        <input id=send type=submit value="Save exercise">
                         <button id="cancelExercise" type="button">Cancel</button>
                     </section>
                 </template>
@@ -51,8 +59,8 @@
             <!-- add rest button -->
             <button id="addRest" type="button">Add Rest</button>
             <!-- save button -->
-            <button id="saveWorkout" type="button">Save</button>
-            <button id="cancelWorkout" type="button">Cancel</button>
+            <button id="saveWorkout" type="button">Save Workout</button>
+            <button id="cancelWorkout" type="button">Cancel Workout</button>
         </section>
     </template>
     <footer>

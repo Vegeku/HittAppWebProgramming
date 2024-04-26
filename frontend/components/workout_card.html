@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>Set Timer</title>
+<!-- <link href="/frontend/components/workout_card.css" rel="stylesheet" type="stylesheet"> -->
+<script defer src="workout_card.js"></script>
+<script type=module src="exercise.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .workout-item {
+    display: flex;
+    /* flex-direction: column; */
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: stretch;
+    align-items: stretch;
+    box-sizing: border-box;
+  }
+
+  #overview {
+    width: 100%;
+    /* Ensures the form takes the full width of its parent */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    box-sizing: border-box;
+  }
+
+  #overview input[type="text"],
+  #overview select,
+  #overview button[type="button"] {
+    width: calc(100% - 2rem);
+    /* Takes full width minus some padding */
+    margin: 10px 1rem;
+    /* Centered margin for aesthetic spacing */
+    padding: 0.8rem;
+    box-sizing: border-box;
+    /* Includes padding and border in width calculation */
+  }
+
+  #overview p {
+    padding: 0 1rem;
+    /* Aligns text padding with inputs and buttons */
+  }
+
+  ul {
+    padding: 0;
+    list-style-type: none;
+    width: 100%;
+    /* Ensures the list takes full width */
+    margin: 10px 0;
+    /* Provides spacing above and below the list */
+  }
+
+  .name {
+    word-wrap: break-word;
+    width: auto;
+    /* align-content: center; */
+  }
+
+  /* .item-info {
+    align-items: center;
+  } */
+  .item-info {
+    flex-grow: 1;
+    /* Grow to fill available space */
+    width: 100%;
+    /* Take full width of its parent */
+    display: flex;
+    /* Use flexbox for internal alignment */
+    flex-direction: column;
+    /* Stack internal items vertically */
+    align-items: stretch;
+    /* Force items to fill the width */
+    justify-content: center;
+    /* Center content vertically */
+    order: 2;
+    /* Maintain its order */
+    box-sizing: border-box;
+    /* Include padding and border in the element's size */
+    padding: 1rem;
+    /* Optional: add padding inside */
+  }
+
+  #start {
+    background-color: green;
+    /* align-self: center; */
+  }
+
+  .view,
+  #start {
+    order: 3;
+    /* Ensures these buttons appear on the next line */
+    flex: 1 1 100%;
+    /* Each button takes full width on separate lines */
+  }
+
+  #delete {
+    order: 1;
+    /* First in the visual order */
+    margin-right: auto;
+    /* Pushes everything else to the right */
+    background-color: red;
+    /* flex-direction: row; */
+    /* align-self: start; */
+  }
+
+  #edit {
+    order: 2;
+    /* Second in the visual order */
+    margin-left: auto;
+    /* Pushes everything to the left */
+    /* align-self: end; */
+  }
+
+  .view,
+  input[type="submit"],
+  input[type="reset"] {
+    color: #007BFF;
+    align-self: center;
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+  }
+
+  .view {
+    background-color: white;
+    color: white;
+  }
+
+  .view:hover {
+    color: #0056b3;
+  }
+
+  .workout-item button {
+    width: auto;
+    /* Adjusted from fixed em size to auto for better flexibility */
+    padding: 0.8em 1.2em;
+    /* More balanced padding */
+    margin: 0.5em;
+    /* Consistent margin */
+    border: none;
+    border-radius: 5px;
+    /* Slightly rounded corners for a softer look */
+    background-color: #007BFF;
+    /* Primary color */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    font-size: 16px;
+    /* Suitable font size for readability */
+    text-transform: uppercase;
+    /* Makes text uppercase for better visibility */
+    font-weight: bold;
+    /* Bold font for better emphasis */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for depth */
+  }
+
+  .workout-item button:hover,
+  .workout-item button:focus {
+    background-color: #0056b3;
+    /* Darker shade on hover */
+    color: #ffffff;
+    transform: translateY(-2px);
+    /* Slight lift effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    /* Enhanced shadow on hover for 3D effect */
+  }
+
+  .workout-item button:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+    opacity: 0.5;
+    box-shadow: none;
+    /* No shadow for disabled state */
+  }
+
+  /* Additional styles for SVG icons within buttons for consistency */
+  .workout-item button svg {
+    fill: currentColor;
+    /* Ensures the SVG icon uses the button's text color */
+    width: 1em;
+    /* Standard size for icons */
+    height: 1em;
+    vertical-align: middle;
+    /* Aligns icon with the text */
+  }
+
+
+  /* .workout-item button { */
+  /* padding: 8px 16px; */
+  /* width: 2em;
+    padding: 0.2em 0.4em;
+    margin: 0.3em; */
+  /* margin-right: 5px; */
+  /* border: none;
+    border-radius: 4px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 2em;
+  } */
+
+  .workout-item button:hover {
+    background-color: #0056b3;
+  }
+
+  .edit-mode-buttons,
+  .view-mode-buttons {
+    display: inline;
+  }
+
+  /* Input styles for edit mode */
+  input[type="text"] {
+    width: calc(100% - 24px);
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    /* includes padding and border in width */
+  }
+
+
+
+  /* Disabled button styling */
+  .workout-item button:disabled {
+    background-color: #cccccc;
+    /* Gray background to indicate non-interaction */
+    color: #666666;
+    /* Dark gray text color to reduce contrast */
+    cursor: not-allowed;
+    /* Cursor indicates the button is not clickable */
+    opacity: 0.7;
+    /* Slightly transparent to show inactivity */
+    border: 1px solid #bbbbbb;
+    /* Optional: add a border to distinguish from enabled state */
+  }
+
+  #overview {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+  }
+
+  #overview form {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Aligning buttons at the bottom of the form */
+  #overview form>button {
+    margin-top: auto;
+    /* Pushes buttons to the bottom of the form space */
+    padding: 10px;
+    margin: 10px 0;
+    /* Provides top margin for spacing and zero bottom margin */
+  }
+
+  /* Creating a container flex row for buttons if not in the HTML */
+  .buttons-container {
+    display: flex;
+    justify-content: space-evenly;
+    /* Evenly spaces buttons across the container */
+    width: 100%;
+    /* Ensures the container takes full width */
+  }
+
+  #overview form>.buttons-container>button {
+    flex-grow: 1;
+    /* Allows buttons to expand and fill the container evenly */
+    margin: 0 5px;
+    /* Provides a little space between buttons */
+  }
+
+  /* Enhanced visual styles for buttons */
+  #overview form>button,
+  #overview form>.buttons-container>button {
+    background-color: #007BFF;
+    /* Primary button color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  #overview form>button:hover,
+  #overview form>.buttons-container>button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    /* Slight lift effect */
+  }
+</style>
+
+<template id="showWorkout">
+  <article class="workout-item">
+    <button id="delete">
+      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z" />
+      </svg>
+    </button>
+    <button id="edit">
+      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75z" />
+      </svg>
+    </button>
+    <section class="item-info">
+      <header>
+        <h4 class="name">Grandma josephine</h4>
+        <p class="level">level</p>
+        <p>Total Time (in seconds): </p>
+        <h4 class="duration">duration</h4>
+      </header>
+    </section>
+    <button class="view">Show more...</button>
+    <button id="start">
+      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m-1 14H9V8h2zm1 0V8l5 4z" />
+      </svg>
+    </button>
+  </article>
+</template>
+
+
+<template id="editWorkout">
+  <article class="workout-item">
+    <form id="overview">
+      <input id="workoutName" type=text autofocus autocomplete=off placeholder='Name'>
+      <select name="level" class="level">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">hard</option>
+      </select>
+      <p>Total Time (in seconds): </p>
+      <p id="totalTime">0</p>
+      <p>Number of exercises: </p>
+      <p id="numberOfexercises">0</p>
+      <!-- make this a custom element -->
+      <ul>
+      </ul>
+    </form>
+    <!-- add Exercise button -->
+    <button type="button">Add Exercise</button>
+    <!-- add rest button -->
+    <button type="button">Add Rest</button>
+    <!-- save button -->
+    <button type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V7zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3s3 1.34 3 3s-1.34 3-3 3m3-10H5V5h10z" />
+      </svg>
+    </button>
+    <button type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m5 13.59L15.59 17L12 13.41L8.41 17L7 15.59L10.59 12L7 8.41L8.41 7L12 10.59L15.59 7L17 8.41L13.41 12z" />
+      </svg>
+    </button>
+  </article>
+</template>
