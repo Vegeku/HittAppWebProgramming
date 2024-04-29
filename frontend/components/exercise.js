@@ -76,20 +76,34 @@ export class Exercise extends HTMLElement {
     const newTime = this.shadow.querySelector('time-setter');
     const newDesc = this.shadow.querySelector('#description');
     const newName = this.shadow.querySelector('#exercise');
+    const error = document.querySelector('#error');
     this.time = newTime.time;
     this.desc = newDesc.value;
     this.textContent = newName.value;
-    const event = new CustomEvent('editExercise', {
-      bubbles: true,
-      detail: { index: this.index, time: this.time, desc: this.desc },
-    });
-
-    this.dispatchEvent(event);
-    this.showExercise();
+    error.textContent = '';
+    if (!(newName.value).trim()) {
+      error.style.display = 'block';
+      error.textContent = `${error.textContent} \n You haven't given the name of the exercise.`;
+    }
+    if (!(newDesc.value).trim()) {
+      error.style.display = 'block';
+      error.textContent = `${error.textContent} \n You haven't given the description of the exercise.`;
+    }
+    if (newTime.time == 0) {
+      error.style.display = 'block';
+      error.textContent = `${error.textContent} \n You haven't given the time of the exercise.`;
+    }
+    if ((newName.value).trim() && (newDesc.value).trim() && newTime.time != 0) {
+      const event = new CustomEvent('editExercise', {
+        bubbles: true,
+        detail: { index: this.index, time: this.time, desc: this.desc },
+      });
+      this.dispatchEvent(event);
+      this.showExercise();
+    }
   }
 
   deleteExercise() {
-    this.remove();
     const event = new CustomEvent('deleteExercise', {
       bubbles: true,
       detail: { index: this.index },

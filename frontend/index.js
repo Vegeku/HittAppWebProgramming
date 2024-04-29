@@ -10,6 +10,11 @@ function buttonSoundEffect() {
   audio.play();
 }
 
+function clearError() {
+  el.error.style.display = 'none'; // Hide the error message
+  el.error.textContent = ''; // Clear the error text
+}
+
 
 function showWorkouts(workouts, where) {
   for (const workout of workouts) {
@@ -41,11 +46,12 @@ async function loadWorkouts() {
 }
 
 async function addWorkoutToServer() {
-  el.error.textContent = '';
+  clearError();
   const duration = document.querySelector('#totalTime');
   const workoutName = document.querySelector('#workoutName');
   const workoutDiff = document.querySelector('#level');
   if (listofExercises.exercises.length !== 0 && (workoutName.value).trim() && (workoutDiff.value).trim()) {
+    el.error.style.display = 'block';
     el.error.textContent = '';
     const payload = { name: (workoutName.value).trim(), difficulty: (workoutDiff.value).trim(), duration: parseInt(duration.textContent), exercises: listofExercises.exercises };
     const response = await fetch('workout', {
@@ -61,9 +67,11 @@ async function addWorkoutToServer() {
       showWorkouts(workoutsList, el.workoutList);
     }
   } else if (listofExercises.exercises.length === 0) {
+    el.error.style.display = 'block';
     el.error.textContent = `${el.error.textContent} \n There are no exercises`;
   }
   if (!(workoutName.value).trim()) {
+    el.error.style.display = 'block';
     el.error.textContent = `${el.error.textContent} \n You haven't given a name to your workout`;
   }
 }
@@ -72,8 +80,9 @@ function addNewRest() {
   const timeInput = document.querySelector('time-setter');
   const exercises = document.querySelector('#exercises');
   const totalTime = document.querySelector('#totalTime');
-  el.error.textContent = '';
+  clearError();
   if (timeInput.time !== 0) {
+    el.error.style.display = 'block';
     el.error.textContent = '';
     totalTime.textContent = parseInt(totalTime.textContent) + parseInt(timeInput.time);
     const newRest = document.createElement('section');
@@ -89,6 +98,7 @@ function addNewRest() {
     el.addExercise.disabled = false;
     el.addRest.disabled = false;
   } else {
+    el.error.style.display = 'block';
     el.error.textContent = 'The rest cannot be 0';
   }
 }
@@ -101,9 +111,9 @@ function addNewExercise() {
   const exercises = document.querySelector('#exercises');
   const numberOfExercises = document.querySelector('#numberOfexercises');
   const totalTime = document.querySelector('#totalTime');
-  el.error.textContent = '';
-  if ((exName.value).trim() !== '' && (description.value).trim() !== '' && timeInput.time !== 0) {
-    el.error.textContent = '';
+  clearError();
+  if ((exName.value).trim() !== '' && (description.value).trim() !== '' && timeInput.time != 0) {
+    clearError();
     const payload = { name: (exName.value).trim(), desc: (description.value).trim(), time: timeInput.time };
     numberOfExercises.textContent = parseInt(numberOfExercises.textContent) + 1;
     totalTime.textContent = parseInt(totalTime.textContent) + parseInt(timeInput.time);
@@ -122,12 +132,15 @@ function addNewExercise() {
     listofExercises.exercises.push(JSON.stringify(payload));
   }
   if (!(exName.value).trim()) {
+    el.error.style.display = 'block';
     el.error.textContent = `${el.error.textContent} \n You haven't given the name of the exercise.`;
   }
   if (!(description.value).trim()) {
+    el.error.style.display = 'block';
     el.error.textContent = `${el.error.textContent} \n You haven't given the description of the exercise.`;
   }
-  if (timeInput.time === 0) {
+  if (timeInput.time == 0) {
+    el.error.style.display = 'block';
     el.error.textContent = `${el.error.textContent} \n You haven't given the time of the exercise.`;
   }
   console.log(listofExercises.exercises);
@@ -143,7 +156,7 @@ function loadExerciseInputs(e) {
   const send = document.querySelector('#send');
   el.exInfo = document.querySelector('#infoInput');
   const cancel = document.querySelector('#cancelExercise');
-  cancel.addEventListener('click', () => { el.exInfo.remove(); e.target.disabled = false; el.addRest.disabled = false; });
+  cancel.addEventListener('click', () => { clearError(); el.exInfo.remove(); e.target.disabled = false; el.addRest.disabled = false; });
   cancel.addEventListener('click', buttonSoundEffect);
   send.addEventListener('click', addNewExercise);
   send.addEventListener('click', buttonSoundEffect);
@@ -159,6 +172,7 @@ function loadRestInput(e) {
   e.target.disabled = true;
   el.addExercise.disabled = true;
   cancel.addEventListener('click', () => {
+    clearError();
     el.rest.remove();
     e.target.disabled = false;
     el.addExercise.disabled = false;
@@ -169,6 +183,7 @@ function loadRestInput(e) {
 }
 
 function removeWorkoutInput() {
+  clearError();
   const workout = document.querySelector('#workout');
   workout.remove();
   listofExercises.exercises = [];
@@ -198,7 +213,7 @@ function prepareHadlers() {
   el.addWorkoutBtn = document.querySelector('#addWorkout');
   el.workoutPage = document.querySelector('#workoutPage');
   el.workoutList = document.querySelector('#workouts');
-  el.error = document.querySelector('footer');
+  el.error = document.querySelector('#error');
 }
 
 function home() {

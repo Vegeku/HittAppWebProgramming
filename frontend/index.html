@@ -5,7 +5,7 @@
 <script type=module src="components/time_setter.js"></script>
 <script type=module src="components/workout_card.js"></script>
 <script type=module src="components/exercise.js"></script>
-<link href="home_page.css" rel="stylesheet" type="text/css"/>
+<link href="home_page.css" rel="stylesheet" type="text/css" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <!-- use less IDs -->
@@ -15,16 +15,17 @@
 </header>
 
 <main>
+    <p id="error">what is the error</p>
     <ul id="workouts">
-    <li>Welcome to the HITT workout app. 
-        To get started press the add workout button to create your own custom workout
-    </li>
+        <li>Welcome to the HITT workout app.
+            To get started press the add workout button to create your own custom workout
+        </li>
     </ul>
     <button id="addWorkout" type="button">Add Workout</button>
     <template id="workoutPage">
-        <section id = "workout">
+        <section id="workout">
             <section id="overview">
-                <input id = "workoutName" type=text autofocus autocomplete=off placeholder='Name'>
+                <input id="workoutName" type=text autofocus autocomplete=off placeholder='Name'>
                 <select name="level" id="level">
                     <option value="easy">Easy</option>
                     <option value="medium">Medium</option>
@@ -40,7 +41,8 @@
                 <template id="chooseExercise">
                     <section id='infoInput'>
                         <input id=exercise type=text autofocus autocomplete=off placeholder='Add a exercise here…'>
-                        <input id=description type=text autofocus autocomplete=off placeholder='Add a description here…'>
+                        <input id=description type=text autofocus autocomplete=off
+                            placeholder='Add a description here…'>
                         <time-setter time="0"></time-setter>
                         <input id=send type=submit value="Save exercise">
                         <button id="cancelExercise" type="button">Cancel</button>
@@ -63,6 +65,4 @@
             <button id="cancelWorkout" type="button">Cancel Workout</button>
         </section>
     </template>
-    <footer>
-    </footer>
 </main>

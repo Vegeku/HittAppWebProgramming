@@ -114,8 +114,16 @@ export class WorkoutCard extends HTMLElement {
         console.log("exercise deleted");
         if (workout.length  > 1) {
             //fix this
+            e.target.remove();
             this.updateWorkout(e.target, 'delete');
             this.fullWorkout[e.target.index] = null;
+            error.style.display = 'none';
+            error.textContent = '';
+        } else {
+            const error = document.querySelector('#error');
+            console.log(error);
+            error.style.display = 'block';
+            error.textContent = 'You must have at least one exercise';
         }
     }
 
@@ -126,7 +134,7 @@ export class WorkoutCard extends HTMLElement {
             exercise.name = e.target.textContent;
             exercise.desc = e.target.desc;
             exercise.time = e.target.time;
-            this.updateWorkout(e.target);
+            this.updateWorkout(e.target, 'add');
         } 
         else if (adding == true) {
             const exerc = { name: e.target.textContent, desc: e.target.desc, time: e.target.time };
