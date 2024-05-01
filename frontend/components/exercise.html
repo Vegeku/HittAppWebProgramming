@@ -17,6 +17,22 @@
         margin: 1em;
     }
 
+    li,
+    #infoInput {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    p {
+        overflow-wrap: anywhere;
+    }
+
+    #error {
+        display: none;
+    }
+
 
     /* body {
         font-family: 'Arial', sans-serif;
@@ -126,6 +142,7 @@
 </style>
 
 <template id="addExercise">
+    <p id="error">error</p>
     <section id='infoInput'>
         <input id=exercise type=text autofocus autocomplete=off placeholder='Name of the exercise here…'>
         <input id=description type=text autofocus autocomplete=off placeholder='Name of the  description here…'>

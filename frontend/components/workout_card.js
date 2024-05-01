@@ -56,7 +56,7 @@ export class WorkoutCard extends HTMLElement {
         const duration = this.shadow.querySelector('.duration');
         const diff = this.shadow.querySelector('.level');
         const start = this.shadow.querySelector('#start');
-        start.addEventListener('click', this.startWorkout.bind(this));
+        // start.addEventListener('click', this.startWorkout.bind(this));
         duration.textContent = this.duration;
         name.textContent = this.textContent;
         diff.textContent = this.diff;
@@ -66,7 +66,7 @@ export class WorkoutCard extends HTMLElement {
         this.addEventListener('click', this.classList.add('show-buttons'));
         del.addEventListener('click', this.delete.bind(this));
         edit.addEventListener('click', this.showEdit.bind(this));
-        view.addEventListener('click', this.showDetails.bind(this));
+        // view.addEventListener('click', this.showDetails.bind(this));
     }
 
     async getFullWorkout() {

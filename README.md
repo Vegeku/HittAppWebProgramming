@@ -213,3 +213,5 @@ function changeTimer() {
 }
 Conclusion
 With these modifications, your app will provide auditory and visual feedback at each transition between exercises, enhancing the user experience. Make sure the paths to your audio files are correct and test the app to ensure the timing and behavior of the transitions are as expected. This will help keep your users engaged and aware of their progress during workouts. -->
+
+https://icon-sets.iconify.design/?query=pause
