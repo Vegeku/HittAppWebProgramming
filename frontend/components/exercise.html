@@ -15,24 +15,60 @@
         border-radius: 2rem;
         padding: 1em;
         margin: 1em;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+        gap: 1rem;
+        flex-wrap: wrap;
     }
 
-    li,
-    #infoInput {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-        flex-wrap: wrap;
+    @media (max-width: 600px) {
+        li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     }
 
     p {
         overflow-wrap: anywhere;
     }
 
-    #error {
-        display: none;
+
+    button {
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        display: inline-flex;
+        justify-content: end;
+        height: 4rem;
+        padding: 0;
+        color: white;
+        display: flex;
+        flex-direction: row;
+        width: 4.2rem;
     }
 
+
+    .button__icon {
+        display: inline-flex;
+        align-items: center;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        color: #fff;
+    }
+
+    /* .button__text {
+    flex-grow: 2;
+  } */
+
+    #delete {
+        background-color: #9A031E;
+    }
+
+    #edit {
+        background-color: #134611;
+    }
 
     /* body {
         font-family: 'Arial', sans-serif;
@@ -158,13 +194,13 @@
         <p>description</p>
         <p>time</p>
         <button id="delete">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+            <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                 <path fill="currentColor"
                     d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z" />
             </svg>
         </button>
         <button id="edit">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+            <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                 <path fill="currentColor"
                     d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75z" />
             </svg>

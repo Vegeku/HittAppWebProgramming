@@ -155,10 +155,8 @@ export class WorkoutCard extends HTMLElement {
     }
 
     async showEdit() {
-        this.clearShadow();
-        const readonly = this.shadow.querySelector('#editWorkout');
-        const clone = readonly.content.cloneNode(true);
-        this.shadow.append(clone);
+        const showEdit = this.shadow.querySelector('dialog');
+        showEdit.showModal();
         this.addAudioTobutton();
         const addExercise = this.shadow.querySelectorAll('button')[0];
         const addRest = this.shadow.querySelectorAll('button')[1];
