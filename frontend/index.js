@@ -34,12 +34,14 @@ function showWorkouts(workouts, where) {
 
 async function loadWorkouts() {
   const response = await fetch('workouts');
+  const prompt = document.querySelector('#prompt');
   let workouts;
   if (response.ok) {
     workouts = await response.json();
     console.log(workouts);
+    prompt.textContent = 'Press a workout to start it or press the button below to create a new one!';
   } else {
-    workouts = [{ exercise: 'failed to load exercises :-(' }];
+    workouts = [{ exercise: 'failed to load workouts :-(' }];
   }
   el.workoutList.replaceChildren();
   showWorkouts(workouts, el.workoutList);
@@ -184,15 +186,13 @@ function loadRestInput(e) {
 
 function removeWorkoutInput() {
   clearError();
-  const workout = document.querySelector('#workout');
-  workout.remove();
+  el.workoutPage.close();
   listofExercises.exercises = [];
   el.addWorkoutBtn.disabled = false;
 }
 
 function loadWorkoutTemplate() {
-  const cloned = el.workoutPage.content.cloneNode(true);
-  el.workoutList.append(cloned);
+  el.workoutPage.showModal();
   el.addWorkoutBtn.disabled = true;
   el.addExercise = document.querySelector('#addExercise');
   const cancel = document.querySelector('#cancelWorkout');

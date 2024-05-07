@@ -1,17 +1,9 @@
 "use strict";
-/**
- * EditableExercise
- * A exercise that can be updated by the user and saved to the server
- */
+
 export class WorkoutCard extends HTMLElement {
 
     fullWorkout = {};
 
-    /**
-     * connectedCallback
-     * When the element is added to the
-     * DOM display the readonly UI
-     */
     async connectedCallback() {
         this.shadow = this.attachShadow({ mode: 'open' });
         const templateURL = import.meta.url.replace('.js', '.html');
@@ -21,11 +13,7 @@ export class WorkoutCard extends HTMLElement {
         this.showReadonly();
     }
 
-    /**
-     * Empty the shadow DOM by selecting
-     * everything that's neither template
-     * nor style and removing all matches. 
-     */
+
     clearShadow() {
         const elems = this.shadow.querySelectorAll(':not(template, style)');
         elems.forEach(elem => elem.remove());
@@ -42,10 +30,6 @@ export class WorkoutCard extends HTMLElement {
         buttons.forEach((button) => { button.addEventListener('click', this.buttonSoundEffect.bind(this)) });
     }
 
-    /**
-     * Show the UI for when the EM is in 'readonly mode'
-     */
-
     showReadonly() {
         this.clearShadow();
         const readonly = this.shadow.querySelector('#showWorkout');
@@ -54,7 +38,7 @@ export class WorkoutCard extends HTMLElement {
         this.addAudioTobutton();
         const name = this.shadow.querySelector('h4');
         const duration = this.shadow.querySelector('.duration');
-        const diff = this.shadow.querySelector('.level');
+        const diff = this.shadow.querySelector('#level');
         const start = this.shadow.querySelector('#start');
         // start.addEventListener('click', this.startWorkout.bind(this));
         duration.textContent = this.duration;
@@ -63,7 +47,7 @@ export class WorkoutCard extends HTMLElement {
         const del = this.shadow.querySelector('#delete');
         const edit = this.shadow.querySelector('#edit');
         const view = this.shadow.querySelector('.view');
-        this.addEventListener('click', this.classList.add('show-buttons'));
+        // this.addEventListener('click', this.showDetails.bind(this));
         del.addEventListener('click', this.delete.bind(this));
         edit.addEventListener('click', this.showEdit.bind(this));
         // view.addEventListener('click', this.showDetails.bind(this));
@@ -163,7 +147,7 @@ export class WorkoutCard extends HTMLElement {
         const cancel = this.shadow.querySelectorAll('button')[3];
         const save = this.shadow.querySelectorAll('button')[2];
         const workoutName = this.shadow.querySelector('#workoutName');
-        const workoutDiff = this.shadow.querySelector('.level');
+        const workoutDiff = this.shadow.querySelector('select');
         const totalTime = this.shadow.querySelector('#totalTime');
         const numberOfExercises = this.shadow.querySelector('#numberOfexercises');
         const workoutData = await this.getWorkoutData();
@@ -197,7 +181,7 @@ export class WorkoutCard extends HTMLElement {
         const buttons = this.shadow.querySelectorAll('button');
         const input = this.shadow.querySelector('input');
         input.disabled = true;
-        const diff = this.shadow.querySelector('.level');
+        const diff = this.shadow.querySelector('#level');
         diff.disabled = true;
         buttons[3].textContent = 'Show less';
         buttons[3].classList.add('view'); 
@@ -290,7 +274,7 @@ export class WorkoutCard extends HTMLElement {
         const method = 'PUT';
         const headers = { 'Content-Type': 'application/json' };
         const name = this.shadow.querySelector('#workoutName').value;
-        const difficulty = this.shadow.querySelector('.level').value;
+        const difficulty = this.shadow.querySelector('select').value;
         const duration = this.shadow.querySelector('#totalTime').textContent;
         const exercises = this.fullWorkout.filter((exercise) => exercise != null).map((exercise) => JSON.stringify(exercise));
         const body = JSON.stringify({ name, difficulty, duration, exercises });

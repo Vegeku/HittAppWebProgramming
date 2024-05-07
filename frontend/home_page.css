@@ -130,6 +130,14 @@ body {
     background:linear-gradient(90deg,var(--background-colour),#acf7c1);
 }
 
+#prompt {
+    background-color: #F1E4F3;
+    border-radius: 0.8rem;
+    padding: 1em;
+    margin: 1em;
+    /* display: inline-flex; */
+    display: none;
+}
 
 ul,li {
     list-style: none;
@@ -140,7 +148,8 @@ ul,li {
 li {
     background-color: #F1E4F3;
     border-style: groove;
-    border-radius: 0.8rem;
+    border-style: groove;
+    border-radius: 1rem;
     padding: 1em;
     margin: 1em;
 }
