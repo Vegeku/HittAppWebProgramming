@@ -54,6 +54,37 @@ export class Exercise extends HTMLElement {
     buttons.forEach((button) => { button.remove(); });
   }
 
+  cancelElement() {
+    if (this.editable === 'true') {
+      this.remove();
+    } else { 
+      this.showExercise();
+    }
+  }
+
+  errorChecking() {
+    const error = this.shadow.querySelector('#error');
+    error.textContent = '';
+    const newTime = this.shadow.querySelector('time-setter');
+    const newDesc = this.shadow.querySelector('#description');
+    const newName = this.shadow.querySelector('#exercise');
+    if (newDesc.value.trim() === '') {
+      error.textContent += 'Description cannot be empty. ';
+    }
+    if (newName.value.trim() === '') {
+      error.textContent += 'Name cannot be empty. ';
+    }
+    if (newTime.time === '0') {
+      error.textContent += 'Time cannot be 0. ';
+    }
+
+    if (newDesc.value.trim() !== '' && newName.value.trim() !== '' && newTime.time !== '0') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   editExercise() {
     this.clearShadow();
     const edit = this.shadow.querySelector('#addExercise');
@@ -69,23 +100,32 @@ export class Exercise extends HTMLElement {
     save.value = 'Save';
     const cancel = this.shadow.querySelector('#cancelExercise');
     save.addEventListener('click', this.saveExerciseEdit.bind(this));
-    cancel.addEventListener('click', this.showExercise.bind(this));
+    cancel.addEventListener('click', this.cancelElement.bind(this));
   }
 
   saveExerciseEdit() {
+    const error = this.shadow.querySelector('#error');
     const newTime = this.shadow.querySelector('time-setter');
     const newDesc = this.shadow.querySelector('#description');
     const newName = this.shadow.querySelector('#exercise');
     this.time = newTime.time;
-    this.desc = newDesc.value;
-    this.textContent = newName.value;
-    const event = new CustomEvent('editExercise', {
+    this.desc = newDesc.value.trim();
+    this.textContent = newName.value.trim();
+    const editEvent = new CustomEvent('editExercise', {
       bubbles: true,
       detail: { index: this.index, time: this.time, desc: this.desc },
     });
 
-    this.dispatchEvent(event);
-    this.showExercise();
+    const addEvent = new CustomEvent('addExercise', {
+      bubbles: true,
+      detail: {time: this.time, desc: this.desc, name: this.textContent},
+    });
+
+    if (this.errorChecking()) {
+      this.dispatchEvent(editEvent);
+      this.dispatchEvent(addEvent);
+      this.showExercise();
+    }
   }
 
   deleteExercise() {
