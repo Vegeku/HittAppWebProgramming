@@ -21,9 +21,9 @@ function changeTimer() {
   if (parseInt(el.duration.textContent) <= 0 && el.currentIndex < el.exerciseList.length - 1) {
     el.currentIndex += 1;
     el.duration.textContent = el.exerciseList[el.currentIndex].time;
+    el.timeLeft.textContent = parseInt(el.timeLeft.textContent) - parseInt(el.exerciseList[el.currentIndex - 1].time);
   } else if (parseInt(el.duration.textContent) > 0) {
     el.duration.textContent = parseInt(el.duration.textContent) - 1;
-    el.timeLeft.textContent = parseInt(el.timeLeft.textContent) - 1;
   }
 
   if (el.currentIndex + 1 < el.exerciseList.length) {

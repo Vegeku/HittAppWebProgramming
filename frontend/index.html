@@ -6,7 +6,7 @@
 <script type=module src="components/time_setter.js"></script>
 <script type=module src="components/workout_card.js"></script>
 <script type=module src="components/exercise.js"></script>
-<link href="home_page.css" rel="stylesheet" type="text/css" />
+<link href="home_page.css" rel="stylesheet" type="text/css"/>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <!-- use less IDs -->
@@ -16,21 +16,24 @@
 </header>
 
 <main>
+<<<<<<< HEAD
     <p>Press a workout to start it</p>
     <p id="error">what is the error</p>
+=======
+>>>>>>> parent of a9a2456 (added error checking and made my own css)
     <ul id="workouts">
-        <li>Welcome to the HITT workout app.
-            To get started press the add workout button to create your own custom workout
-        </li>
+    <li>Welcome to the HITT workout app. 
+        To get started press the add workout button to create your own custom workout
+    </li>
     </ul>
     <button id="addWorkout" type="button">
         <span class="button__text">Add Workout</span>
         <svg class= "button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M19 12.998h-6v6h-2v-6H5v-2h6v-6h2v6h6z"/></svg>
     </button>
     <template id="workoutPage">
-        <section id="workout">
+        <section id = "workout">
             <section id="overview">
-                <input id="workoutName" type=text autofocus autocomplete=off placeholder='Name'>
+                <input id = "workoutName" type=text autofocus autocomplete=off placeholder='Name'>
                 <select name="level" id="level">
                     <option value="easy">Easy</option>
                     <option value="medium">Medium</option>
@@ -46,8 +49,7 @@
                 <template id="chooseExercise">
                     <section id='infoInput'>
                         <input id=exercise type=text autofocus autocomplete=off placeholder='Add a exercise here…'>
-                        <input id=description type=text autofocus autocomplete=off
-                            placeholder='Add a description here…'>
+                        <input id=description type=text autofocus autocomplete=off placeholder='Add a description here…'>
                         <time-setter time="0"></time-setter>
                         <input id=send type=submit value="Save exercise">
                         <button id="cancelExercise" type="button">
@@ -88,4 +90,6 @@
             </button>
         </section>
     </template>
+    <footer>
+    </footer>
 </main>

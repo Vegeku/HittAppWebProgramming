@@ -8,6 +8,7 @@
 
 
 <style>
+<<<<<<< HEAD
     li {
         list-style: none;
         background-color: #F1E4F3;
@@ -71,16 +72,21 @@
     }
 
     /* body {
+=======
+    body {
+>>>>>>> parent of a9a2456 (added error checking and made my own css)
         font-family: 'Arial', sans-serif;
         background-color: #f0f4f8;
         margin: 0;
         padding: 10px;
+        /* Reduced padding for mobile devices */
         color: #333;
     }
 
     section {
         background: white;
         padding: 15px;
+        /* Adjusted padding */
         border-radius: 8px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         margin-bottom: 15px;
@@ -90,12 +96,32 @@
     input[type="submit"] {
         width: 100%;
         padding: 8px;
+        /* Smaller padding for mobile inputs */
         margin: 8px 0;
         box-sizing: border-box;
         border-radius: 4px;
         border: 1px solid #ccc;
         font-size: 16px;
+        /* Ensuring readable font size */
     }
+
+    /* button {
+        background-color: #007bff;
+        color: white;
+        padding: 8px 16px; */
+    /* Smaller padding for buttons */
+    /* border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px 2px; */
+    /* Smaller margins */
+    /* font-size: 14px; */
+    /* Smaller font size for mobile */
+    /* } */
+
+    /* button:hover {
+        background-color: #0056b3;
+    } */
 
     button {
         background-color: #007bff;
@@ -106,23 +132,32 @@
         cursor: pointer;
         margin: 5px 2px;
         font-size: 16px;
+        /* Increase font size slightly for readability */
         text-transform: uppercase;
+        /* Adds more emphasis */
         font-weight: bold;
+        /* Makes text bolder */
         transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+        /* Smooth transitions for hover effects */
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        /* Adds a subtle shadow for depth */
     }
 
     button:hover {
         background-color: #0056b3;
         transform: translateY(-2px);
+        /* Lift effect on hover */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        /* Enhances shadow for a 3D effect */
     }
 
     button svg {
         fill: currentColor;
+        /* Ensures SVG icons use the text color of the button */
         width: 1em;
         height: 1em;
         vertical-align: middle;
+        /* Centers SVG vertically with the text */
     }
 
     #delete {
@@ -134,6 +169,7 @@
         background: #ffffff;
         border: 1px solid #ddd;
         padding: 10px;
+        /* Adjusted padding */
         margin-top: 10px;
         border-radius: 4px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -142,15 +178,18 @@
     li p {
         margin: 5px 0;
         font-size: 14px;
+        /* Smaller font size for better mobile readability */
     }
 
     @media (min-width: 600px) {
         body {
             padding: 20px;
+            /* More padding for larger screens */
         }
 
         section {
             padding: 20px;
+            /* More padding for larger screens */
         }
 
         input[type="text"],
@@ -158,6 +197,7 @@
             padding: 10px;
             margin: 10px 0;
             font-size: 18px;
+            /* Larger font size for desktop */
         }
 
         button {
@@ -174,7 +214,7 @@
             font-size: 16px;
             overflow: clip;
         }
-    } */
+    }
 </style>
 
 <template id="addExercise">

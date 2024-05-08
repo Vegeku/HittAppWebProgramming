@@ -7,13 +7,5 @@ CREATE TABLE Workout (
     --the exercises are going to be store as JSON
 ); 
 
--- INSERT INTO Workout VALUES {
---     1,
---     "default exercises",
---     'Easy',
---     0,
---     `{"exercises": []}`
--- }
-
 -- DROP TABLE Workout;
 

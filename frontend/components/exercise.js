@@ -76,6 +76,7 @@ export class Exercise extends HTMLElement {
     const newTime = this.shadow.querySelector('time-setter');
     const newDesc = this.shadow.querySelector('#description');
     const newName = this.shadow.querySelector('#exercise');
+<<<<<<< HEAD
     const error = this.shadow.querySelector('#error');
     error.textContent = '';
     if (!(newName.value).trim()) {
@@ -103,9 +104,22 @@ export class Exercise extends HTMLElement {
       this.dispatchEvent(event);
       this.showExercise();
     }
+=======
+    this.time = newTime.time;
+    this.desc = newDesc.value;
+    this.textContent = newName.value;
+    const event = new CustomEvent('editExercise', {
+      bubbles: true,
+      detail: { index: this.index, time: this.time, desc: this.desc },
+    });
+
+    this.dispatchEvent(event);
+    this.showExercise();
+>>>>>>> parent of a9a2456 (added error checking and made my own css)
   }
 
   deleteExercise() {
+    this.remove();
     const event = new CustomEvent('deleteExercise', {
       bubbles: true,
       detail: { index: this.index },
