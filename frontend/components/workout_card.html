@@ -8,11 +8,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <style>
+<<<<<<< HEAD
   body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 20px;
+=======
+  .workout-item {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .item-info {
+    flex: 2;
+>>>>>>> parent of d414957 (Add better styling for the dialog box)
   }
 
   ul {
@@ -264,6 +276,7 @@
     /* Optional: add a border to distinguish from enabled state */
   }
 
+<<<<<<< HEAD
   #overview {
     display: flex;
     flex-direction: column;
@@ -293,10 +306,227 @@
     /* Evenly spaces buttons across the container */
     width: 100%;
     /* Ensures the container takes full width */
+=======
+  @media (max-width: 40em) {
+    .workout-item {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: nowrap;
+      align-items: center;
+    }
+
+    button {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .button__icon {
+      display: flex;
+      align-items: center;
+      width: fit-content;
+    }
+
+    button {
+      width: 4.2rem;
+    }
+
+    .button__text,
+    .button__icon {
+      display: inline-flex;
+      align-items: center;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      color: #fff;
+    }
+
+    .button__text {
+      padding: 1rem 0rem 0rem 0rem;
+      flex-direction: column
+    }
+
+    .item-info {
+      flex: 1 1 15em;
+      justify-self: center;
+    }
+  }
+
+
+
+  /* body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .workout-item {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: stretch;
+    align-items: stretch;
+    box-sizing: border-box;
+  }
+
+  #overview {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    box-sizing: border-box;
+  }
+
+  #overview input[type="text"],
+  #overview select,
+  #overview button[type="button"] {
+    width: calc(100% - 2rem);
+    margin: 10px 1rem;
+    padding: 0.8rem;
+    box-sizing: border-box;
+  }
+
+  #overview p {
+    padding: 0 1rem;
+  }
+
+  ul {
+    padding: 0;
+    list-style-type: none;
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .name {
+    word-wrap: break-word;
+    width: auto;
+  }
+
+  .item-info {
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    order: 2;
+    box-sizing: border-box;
+    padding: 1rem;
+  }
+
+  #start {
+    background-color: green;
+  }
+
+  .view,
+  #start {
+    order: 3;
+    flex: 1 1 100%;
+  }
+
+  #delete {
+    order: 1;
+    margin-right: auto;
+    background-color: red;
+  }
+
+  #edit {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .workout-item button {
+    width: auto;
+    padding: 0.8em 1.2em;
+    margin: 0.5em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .workout-item button:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+    opacity: 0.5;
+    box-shadow: none;
+  }
+
+  .workout-item button svg {
+    fill: currentColor;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    color: white;
+  }
+
+  .edit-mode-buttons,
+  .view-mode-buttons {
+    display: inline;
+  }
+
+  input[type="text"] {
+    width: calc(100% - 24px);
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+
+
+
+  .workout-item button:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+    opacity: 0.7;
+    border: 1px solid #bbbbbb;
+  }
+
+  #overview {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+  }
+
+  #overview form {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+
+  #overview form>button {
+    margin-top: auto;
+    padding: 10px;
+    margin: 10px 0;
+  }
+
+
+  .buttons-container {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+>>>>>>> parent of d414957 (Add better styling for the dialog box)
   }
 
   #overview form>.buttons-container>button {
     flex-grow: 1;
+<<<<<<< HEAD
     /* Allows buttons to expand and fill the container evenly */
     margin: 0 5px;
     /* Provides a little space between buttons */
@@ -321,56 +551,36 @@
     transform: translateY(-2px);
     /* Slight lift effect */
   }
+=======
+    margin: 0 5px;
+  }
+
+    .view,
+  input[type="submit"],
+  input[type="reset"] {
+    color: #007BFF;
+    align-self: center;
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+  }
+
+  .view {
+    background-color: white;
+    color: #007BFF;
+  }
+
+  .view:hover {
+    color: #0056b3;
+  } */
+>>>>>>> parent of d414957 (Add better styling for the dialog box)
 </style>
 
 <template id="showWorkout">
-  <dialog>
-    <form id="overview">
-      <input id="workoutName" type=text autofocus autocomplete=off placeholder='Name'>
-      <select name="level" class="level">
-        <option value="easy">Easy</option>
-        <option value="medium">Medium</option>
-        <option value="hard">hard</option>
-      </select>
-      <!-- make this a custom element -->
-      <ul>
-      </ul>
-      <p>Total Time (in seconds): </p>
-      <p id="totalTime">0</p>
-      <p>Number of exercises: </p>
-      <p id="numberOfexercises">0</p>
-    </form>
-    <!-- add Exercise button -->
-    <button type="button">
-      <span class="button__text">Add Exercise</span>
-      <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M19 12.998h-6v6h-2v-6H5v-2h6v-6h2v6h6z" />
-      </svg>
-    </button>
-    <!-- add rest button -->
-    <button type="button">
-      <span class="button__text">Add Rest</span>
-      <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M19 12.998h-6v6h-2v-6H5v-2h6v-6h2v6h6z" />
-      </svg>
-    </button>
-    <!-- save button -->
-    <button type="button">
-      <span class="button__text">Save</span>
-      <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-        <path fill="currentColor"
-          d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V7zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3s3 1.34 3 3s-1.34 3-3 3m3-10H5V5h10z" />
-      </svg>
-    </button>
-    <button type="button">
-      <span class="button__text">Cancel</span>
-      <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-        <path fill="currentColor"
-          d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m5 13.59L15.59 17L12 13.41L8.41 17L7 15.59L10.59 12L7 8.41L8.41 7L12 10.59L15.59 7L17 8.41L13.41 12z" />
-      </svg>
-    </button>
-  </dialog>
-
   <article class="workout-item">
     <section class="item-info">
       <header>
@@ -401,5 +611,55 @@
       </svg>
       start
     </button> -->
+  </article>
+</template>
+
+
+<template id="editWorkout">
+  <article class="workout-item">
+    <form id="overview">
+      <input id="workoutName" type=text autofocus autocomplete=off placeholder='Name'>
+      <select name="level" class="level">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">hard</option>
+      </select>
+      <p>Total Time (in seconds): </p>
+      <p id="totalTime">0</p>
+      <p>Number of exercises: </p>
+      <p id="numberOfexercises">0</p>
+      <!-- make this a custom element -->
+      <ul>
+      </ul>
+    </form>
+    <!-- add Exercise button -->
+    <button type="button">
+      <span class="button__text">Add Exercise</span>
+      <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M19 12.998h-6v6h-2v-6H5v-2h6v-6h2v6h6z" />
+      </svg>
+    </button>
+    <!-- add rest button -->
+    <button type="button">
+      <span class="button__text">Add Rest</span>
+      <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M19 12.998h-6v6h-2v-6H5v-2h6v-6h2v6h6z" />
+      </svg>
+    </button>
+    <!-- save button -->
+    <button type="button">
+      <span class="button__text">Save</span>
+      <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V7zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3s3 1.34 3 3s-1.34 3-3 3m3-10H5V5h10z" />
+      </svg>
+    </button>
+    <button type="button">
+      <span class="button__text">Cancel</span>
+      <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m5 13.59L15.59 17L12 13.41L8.41 17L7 15.59L10.59 12L7 8.41L8.41 7L12 10.59L15.59 7L17 8.41L13.41 12z" />
+      </svg>
+    </button>
   </article>
 </template>
