@@ -126,95 +126,9 @@ ul#workouts li {
     margin-top: 10px;
 } */
 
-<<<<<<< HEAD
-* {
-    text-align: center;
-    font-family: sans-serif;
-}
-
-body {
-    --background-colour: #255f85;
-    background:linear-gradient(90deg,var(--background-colour),#acf7c1);
-}
-
-
-ul,li {
-    list-style: none;
-    margin:0;
-    padding:0;
-}
-
-li {
-    background-color: #F1E4F3;
-    border-style: groove;
-    border-radius: 0.8rem;
-    padding: 1em;
-    margin: 1em;
-}
-
-h1 {
-    background-color: var(--background-colour);
-    color: white;
-    border-radius: 2rem;
-} 
-
-#error {
-    display: none;
-    position: sticky;
-    top: 1em;
-}
-
-#send,button {
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    /* display: inline-flex; */
-    height: 4rem;
-    padding: 0;
-    color: white;
-    --button-color: #1C3144;
-    background-color: var(--button-color);
-    border: none;
-    outline: none;
-    cursor: pointer;
-    overflow: hidden;
-    font-weight: 500;
-}
-
-#send:hover,button:hover {
-    background-color: #001C3144;
-    /* box-shadow: 0em 0em 0.1rem 0.1rem rgb(0,0,0); */
-}
-
-#send:active,button:active {
-    background-color: #ff1C3144;   
-}
-
-#send:disabled,button:disabled {
-    background-color: #b3cae0;
-    /* box-shadow: 0em 0em 0.1rem 0.1rem rgb(0,0,0); */
-}
-
-.button__text,.button__icon {
-    display: inline-flex;
-    align-items: center;
-    padding: 0 1.8rem;
-    color: #fff;
-}
-
-ul {
-    display: grid;
-    /* grid-auto-flow: column; */
-    grid-template-columns: repeat(auto-fill, 20em);
-    justify-content: center;
-}
-
-@media (max-width: 38em) {
-    ul {
-=======
 /* Media query for desktops and larger screens */
 @media (min-width: 600px) {
     ul#workouts {
->>>>>>> parent of a9a2456 (added error checking and made my own css)
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 10px;
