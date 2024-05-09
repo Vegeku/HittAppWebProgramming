@@ -54,9 +54,9 @@ export class WorkoutCard extends HTMLElement {
         this.addAudioTobutton();
         const name = this.shadow.querySelector('h4');
         const duration = this.shadow.querySelector('.duration');
-        const diff = this.shadow.querySelector('.level');
+        const diff = this.shadow.querySelector('#diff');
         const start = this.shadow.querySelector('#start');
-        // start.addEventListener('click', this.startWorkout.bind(this));
+        start.addEventListener('click', this.startWorkout.bind(this));
         duration.textContent = this.duration;
         name.textContent = this.textContent;
         diff.textContent = this.diff;
@@ -72,7 +72,7 @@ export class WorkoutCard extends HTMLElement {
     async getFullWorkout() {
         const workoutData = await this.getWorkoutData();
         const workout = JSON.parse(workoutData.exercises);
-        const fullWorkout = workout.exercises;
+        const fullWorkout = workout.exercises.map((exercise) => JSON.parse(exercise));
         return fullWorkout;
     }
 
@@ -150,10 +150,10 @@ export class WorkoutCard extends HTMLElement {
         const showEdit = this.shadow.querySelector('dialog');
         showEdit.showModal();
         this.addAudioTobutton();
-        const addExercise = this.shadow.querySelectorAll('button')[0];
-        const addRest = this.shadow.querySelectorAll('button')[1];
-        const cancel = this.shadow.querySelectorAll('button')[3];
-        const save = this.shadow.querySelectorAll('button')[2];
+        const addExercise = this.shadow.querySelectorAll('button')[1];
+        const addRest = this.shadow.querySelectorAll('button')[2];
+        const cancel = this.shadow.querySelectorAll('button')[4];
+        const save = this.shadow.querySelectorAll('button')[3];
         const workoutName = this.shadow.querySelector('#workoutName');
         const workoutDiff = this.shadow.querySelector('.level');
         const totalTime = this.shadow.querySelector('#totalTime');
@@ -184,25 +184,23 @@ export class WorkoutCard extends HTMLElement {
         listofExercises.append(rest);
     }
 
-    async showDetails() {
-        const exercises = await this.showEdit();
-        const buttons = this.shadow.querySelectorAll('button');
-        const input = this.shadow.querySelector('input');
-        input.disabled = true;
-        const diff = this.shadow.querySelector('.level');
-        diff.disabled = true;
-        buttons[3].textContent = 'Show less';
-        buttons[3].classList.add('view'); 
-        for (let i = 0; i < buttons.length - 1; i++) {
-            buttons[i].remove()
-        }
-        exercises.forEach((exercise) => exercise.editable = "readonly");
-    }
+    // async showDetails() {
+    //     const exercises = await this.showEdit();
+    //     const buttons = this.shadow.querySelectorAll('button');
+    //     const input = this.shadow.querySelector('input');
+    //     input.disabled = true;
+    //     const diff = this.shadow.querySelector('.level');
+    //     diff.disabled = true;
+    //     buttons[3].textContent = 'Show less';
+    //     buttons[3].classList.add('view'); 
+    //     for (let i = 0; i < buttons.length - 1; i++) {
+    //         buttons[i].remove()
+    //     }
+    //     exercises.forEach((exercise) => exercise.editable = "readonly");
+    // }
 
     async startWorkout() {
-        console.log(this.fullWorkout);
         const values = await this.getWorkoutData();
-        console.log(values.exercises);
         sessionStorage.setItem('exercises', values.exercises);
         sessionStorage.setItem('totalTime', values.duration);
 
@@ -216,7 +214,9 @@ export class WorkoutCard extends HTMLElement {
 
 
     async cancel() {
-        this.fullWorkout = await this.getFullWorkout();
+        const cancel = this.shadow.querySelector('dialog');
+        console.log(cancel);
+        cancel.close();
         this.showReadonly();
     }
 
@@ -255,10 +255,23 @@ export class WorkoutCard extends HTMLElement {
         }
     }
 
+    get diff() {
+        return this.getAttribute('diff');
+    }
+
+    set diff(value) {
+        if (value ==='easy' || value==='medium' || value==='hard') {
+            this.setAttribute('diff', value);
+        } else {
+            this.setAttribute('diff', 'easy');
+        }
+    }
+
     async getWorkoutData() {
         const response = await fetch(this.url);
         if (response.ok) {
             const values = await response.json();
+            console.log(values);
             return values;
         }
         return {};

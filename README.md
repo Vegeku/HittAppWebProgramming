@@ -214,4 +214,32 @@ function changeTimer() {
 Conclusion
 With these modifications, your app will provide auditory and visual feedback at each transition between exercises, enhancing the user experience. Make sure the paths to your audio files are correct and test the app to ensure the timing and behavior of the transitions are as expected. This will help keep your users engaged and aware of their progress during workouts. -->
 
+helped me fix a bug with my code
+prompt = explain this
+<!-- The getData function in your code is responsible for retrieving data from the session storage and processing it.
+
+First, it retrieves a stringified JSON object from the session storage with the key 'exercises'. This object is then parsed into a JavaScript object and assigned to the workoutExercises variable.
+
+Next, it retrieves another item from the session storage with the key 'totalTime' and assigns it to the totalTime property of the el object. It's important to note that the value retrieved from the session storage is always a string. If 'totalTime' is supposed to be a number, you might need to convert it using parseInt or parseFloat.
+
+Then, it attempts to map over the exercises property of the workoutExercises object. For each exercise in the exercises array, it tries to parse it as JSON. However, there's a mistake here. The result of JSON.parse(exercise) is not returned from the arrow function, so the map operation will result in an array of undefined values. To fix this, you should return the result of JSON.parse(exercise) from the arrow function.
+
+Finally, it logs the workoutExercises object and the exerciseList property of the el object to the console. This is likely for debugging purposes.
+
+Here's the corrected version of your code:
+
+function getData() {
+  const workoutStorage = sessionStorage.getItem('exercises');
+  const workoutExercises = JSON.parse(workoutStorage);
+  el.totalTime = parseInt(sessionStorage.getItem('totalTime'), 10);
+  el.exerciseList = workoutExercises.exercises.map((exercise) => JSON.parse(exercise));
+  console.log(workoutExercises);
+  console.log(el.exerciseList);
+}
+
+In this version, parseInt is used to convert 'totalTime' to a number, and the result of JSON.parse(exercise) is returned from the arrow function in the map operation.
+
+start -->
+
+
 https://icon-sets.iconify.design/?query=pause

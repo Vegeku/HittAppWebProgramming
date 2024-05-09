@@ -38,13 +38,13 @@ function changeTimer() {
     stopWorkout();
   }
 
-  if (el.duration.textContent == 3) {
+  if (el.duration.textContent <= 3) {
     const main = document.querySelector('main');
-    soundEffect('beep');
+    // soundEffect('beep');
     main.classList.add('highlight');
     setTimeout(() => {
       main.classList.remove('highlight');
-    }, 3000);
+    }, 1000);
   }
 }
 
@@ -76,7 +76,7 @@ function continueAndPauseWorkout() {
 }
 
 function getData() {
-  const workoutExercises = JSON.parse(sessionStorage.getItem('exercises'));
+  const workoutExercises = sessionStorage.getItem('exercises');
   el.totalTime = sessionStorage.getItem('totalTime');
   el.exerciseList = workoutExercises.exercises;
 }

@@ -101,20 +101,12 @@
     /* align-self: center; */
   }
 
-  .view,
   #start {
-    order: 3;
-    /* Ensures these buttons appear on the next line */
-    flex: 1 1 100%;
-    /* Each button takes full width on separate lines */
-  }
-
-  #delete {
     order: 1;
     /* First in the visual order */
     margin-right: auto;
     /* Pushes everything else to the right */
-    background-color: red;
+    background-color: green;
     /* flex-direction: row; */
     /* align-self: start; */
   }
@@ -321,16 +313,28 @@
     transform: translateY(-2px);
     /* Slight lift effect */
   }
+
+  dialog {
+    width: 100%;
+    height: 100%;
+  }
 </style>
 
 <template id="showWorkout">
   <dialog>
+    <button id="delete">
+      <span class="button__text">Delete</span>
+      <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z" />
+      </svg>
+    </button>
     <form id="overview">
       <input id="workoutName" type=text autofocus autocomplete=off placeholder='Name'>
       <select name="level" class="level">
         <option value="easy">Easy</option>
         <option value="medium">Medium</option>
         <option value="hard">hard</option>
+        <option value="hard">asian</option>
       </select>
       <!-- make this a custom element -->
       <ul>
@@ -375,18 +379,12 @@
     <section class="item-info">
       <header>
         <h4 class="name">Grandma josephine</h4>
-        <p class="level">level</p>
+        <p id="diff">level</p>
         <h4 class="duration">
           duration
         </h4>
       </header>
     </section>
-    <button id="delete">
-      <span class="button__text">Delete</span>
-      <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z" />
-      </svg>
-    </button>
     <button id="edit">
       <span class="button__text">Edit</span>
       <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -394,12 +392,12 @@
           d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75z" />
       </svg>
     </button>
-    <!-- <button class="view">Show more...</button>
+    <!-- <button class="view">Show more...</button> -->
     <button id="start">
       <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
         <path fill="currentColor" d="M8 5.14v14l11-7z" />
       </svg>
       start
-    </button> -->
+    </button>
   </article>
 </template>
