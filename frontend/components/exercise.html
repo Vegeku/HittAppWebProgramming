@@ -8,146 +8,64 @@
 
 
 <style>
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f0f4f8;
-        margin: 0;
-        padding: 10px;
-        /* Reduced padding for mobile devices */
-        color: #333;
+    li {
+        list-style: none;
+        background-color: #F1E4F3;
+        border-style: groove;
+        border-radius: 2rem;
+        padding: 1em;
+        margin: 1em;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+        gap: 1rem;
+        flex-wrap: wrap;
     }
 
-    section {
-        background: white;
-        padding: 15px;
-        /* Adjusted padding */
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        margin-bottom: 15px;
+    @media (max-width: 600px) {
+        li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     }
 
-    input[type="text"],
-    input[type="submit"] {
-        width: 100%;
-        padding: 8px;
-        /* Smaller padding for mobile inputs */
-        margin: 8px 0;
-        box-sizing: border-box;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-        font-size: 16px;
-        /* Ensuring readable font size */
+    p {
+        overflow-wrap: anywhere;
     }
 
-    /* button {
-        background-color: #007bff;
+
+    #send, #cancelExercise, button {
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        height: 4rem;
+        padding: 0;
         color: white;
-        padding: 8px 16px; */
-    /* Smaller padding for buttons */
-    /* border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin: 5px 2px; */
-    /* Smaller margins */
-    /* font-size: 14px; */
-    /* Smaller font size for mobile */
-    /* } */
-
-    /* button:hover {
-        background-color: #0056b3;
-    } */
-
-    button {
-        background-color: #007bff;
-        color: white;
-        padding: 10px 16px;
+        --button-color: #1C3144;
+        background-color: var(--button-color);
         border: none;
-        border-radius: 6px;
+        outline: none;
         cursor: pointer;
-        margin: 5px 2px;
-        font-size: 16px;
-        /* Increase font size slightly for readability */
-        text-transform: uppercase;
-        /* Adds more emphasis */
-        font-weight: bold;
-        /* Makes text bolder */
-        transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
-        /* Smooth transitions for hover effects */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        /* Adds a subtle shadow for depth */
+        overflow: hidden;
+        font-weight: 500;
     }
 
-    button:hover {
-        background-color: #0056b3;
-        transform: translateY(-2px);
-        /* Lift effect on hover */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        /* Enhances shadow for a 3D effect */
-    }
 
-    button svg {
-        fill: currentColor;
-        /* Ensures SVG icons use the text color of the button */
-        width: 1em;
-        height: 1em;
-        vertical-align: middle;
-        /* Centers SVG vertically with the text */
+    .button__icon {
+        display: inline-flex;
+        align-items: center;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        color: #fff;
     }
 
     #delete {
-        background-color: red;
+        background-color: #9A031E;
     }
 
-    li {
-        list-style: none;
-        background: #ffffff;
-        border: 1px solid #ddd;
-        padding: 10px;
-        /* Adjusted padding */
-        margin-top: 10px;
-        border-radius: 4px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    li p {
-        margin: 5px 0;
-        font-size: 14px;
-        /* Smaller font size for better mobile readability */
-    }
-
-    @media (min-width: 600px) {
-        body {
-            padding: 20px;
-            /* More padding for larger screens */
-        }
-
-        section {
-            padding: 20px;
-            /* More padding for larger screens */
-        }
-
-        input[type="text"],
-        input[type="submit"] {
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 18px;
-            /* Larger font size for desktop */
-        }
-
-        button {
-            padding: 10px 20px;
-            margin: 5px;
-            font-size: 16px;
-        }
-
-        li {
-            padding: 15px;
-        }
-
-        li p {
-            font-size: 16px;
-            overflow: clip;
-        }
+    #edit {
+        background-color: #134611;
     }
 </style>
 

@@ -1,6 +1,29 @@
-I used ChatGPT to help me delete an exercise
+# HIIT upXXXXXXX <-- your student number here
+## Key features
+REMOVE ME: Introduce the key features, paying special attention to the non-code ones.  Tell us briefly how to find & use them, and describes the reasons behind the design decisions you made in their implementation.  
 
-<!-- I see, if the delete and edit buttons are encapsulated within the shadow DOM of the exercise-info element, you'll need a different approach to handle events for these buttons. One common approach is to dispatch custom events from within the shadow DOM and listen for these events outside of the shadow DOM.
+### Create Workout/Description.
+To create a workout you press the "Press button to add a Workout button". That brings you to a new page that allows you to create a workout my giving it a name, difficulty. You have the option to cancel you action by pressing the "Cancel Workout" button.
+
+### Edit Workout/Description.
+A workout can be edited only when they are once created. To do that, press the edit button. Once you press the edit button, you are different to an edit page that will allow you to edit and delete the workout.
+
+### Add Exercise/Description.
+Exercises are added within a workout. To do that, you need to start by pressing the "Press button to add a Workout button", from there you have to press the "Add Exercise" button, which will allow you to add an exercise.
+
+
+
+
+## AI and other resources
+
+I used this website https://icon-sets.iconify.design/?query=pause to get icons for my html 
+
+### Prompts to develop XYZ (examples)
+
+
+>  I used ChatGPT to help me delete an exercise, this gave me code that allowed my to find out why my code wasn't working
+
+I see, if the delete and edit buttons are encapsulated within the shadow DOM of the exercise-info element, you'll need a different approach to handle events for these buttons. One common approach is to dispatch custom events from within the shadow DOM and listen for these events outside of the shadow DOM.
 
 Here's how you can implement this:
 
@@ -51,14 +74,8 @@ document.addEventListener('editExercise', (event) => {
 With this approach, you don't need direct access to the shadow DOM of the exercise-info custom element. Instead, you use custom events to communicate between the exercise-info element and its parent or other elements outside of its shadow DOM.
 
 
+>  I was trying to figure out why my a certain if startement wasn't working, this allows me to debug my code and fix the issue.
 
-
-
-
- -->
-
- I was trying to figure out why my if statements weren't working
-<!-- 
  why is  this.editExercise(); not showing when I set the editable attribute 
 to true
 
@@ -73,20 +90,21 @@ get editable() {
     const value = this.getAttribute('editable');
     return value === 'true'; // Return true if the attribute value is 'true', otherwise false
 }
-With this change, the editable attribute getter will return a boolean value based on whether the attribute value is "true" or not. This should enable the editExercise() method to be called when the editable attribute is set to true. -->
-
-this made me figure out why I couldn't get any exercise
-
-<!-- Simplify Code: Temporarily simplify your code to isolate the issue. For example, try adding a single exercise-info element directly to the shadow DOM without looping through an array, and see if you can access it. -->
-
-css and html in the same place to decrease network requests for future scalability.
+With this change, the editable attribute getter will return a boolean value based on whether the attribute value is "true" or not. This should enable the editExercise() method to be called when the editable attribute is set to true.
 
 
-asked chstgpt to add css 
+
+
+
+>this made me figure out why I couldn't get any exercise
+
+Simplify Code: Temporarily simplify your code to isolate the issue. For example, try adding a single exercise-info element directly to the shadow DOM without looping through an array, and see if you can access it.
+
+>I used ChatGPT as a starting point for my CSS, which I had to modify later do to the units used
 
   make button appear only when the user selects a workout by hovering over it, make it work on mobile as well
 
-<!-- 
+
 
 To modify the HTML and CSS to make the buttons appear only when the user hovers over a workout and to ensure it works on mobile as well, you can use a combination of CSS for hover effects and JavaScript to handle touch events on mobile devices. Since CSS hover states don't naturally trigger on most touch devices, using JavaScript is a practical solution.
 
@@ -147,12 +165,12 @@ This approach gives you a responsive UI that adapts to both desktop and mobile e
 
 
 
- -->
 
 
 
 
-<!-- To enhance your Fitness HIIT App with a beep sound and color change when moving to the next exercise, you need to add audio feedback and visual cues in the JavaScript logic managing the workout session transitions. Let's integrate these features into your existing code.
+
+To enhance your Fitness HIIT App with a beep sound and color change when moving to the next exercise, you need to add audio feedback and visual cues in the JavaScript logic managing the workout session transitions. Let's integrate these features into your existing code.
 
 Adding Audio Feedback
 You've already implemented a function to play a click noise when certain buttons are clicked (buttonSoundEffect). For the beep sound when transitioning to a new exercise, you should use a similar approach but with a different sound file:
@@ -212,11 +230,11 @@ function changeTimer() {
     }
 }
 Conclusion
-With these modifications, your app will provide auditory and visual feedback at each transition between exercises, enhancing the user experience. Make sure the paths to your audio files are correct and test the app to ensure the timing and behavior of the transitions are as expected. This will help keep your users engaged and aware of their progress during workouts. -->
+With these modifications, your app will provide auditory and visual feedback at each transition between exercises, enhancing the user experience. Make sure the paths to your audio files are correct and test the app to ensure the timing and behavior of the transitions are as expected. This will help keep your users engaged and aware of their progress during workouts.
 
-helped me fix a bug with my code
-prompt = explain this
-<!-- The getData function in your code is responsible for retrieving data from the session storage and processing it.
+> helped me fix a bug with my code
+
+The getData function in your code is responsible for retrieving data from the session storage and processing it.
 
 First, it retrieves a stringified JSON object from the session storage with the key 'exercises'. This object is then parsed into a JavaScript object and assigned to the workoutExercises variable.
 
@@ -239,7 +257,60 @@ function getData() {
 
 In this version, parseInt is used to convert 'totalTime' to a number, and the result of JSON.parse(exercise) is returned from the arrow function in the map operation.
 
-start -->
+start
 
 
-https://icon-sets.iconify.design/?query=pause
+> was getting errors with passing json with session storage
+pass a list of objects from one file to another using sessionStorage
+
+Using `sessionStorage` to pass a list of objects from one JavaScript file to another within the same browsing session is straightforward. The `sessionStorage` object stores data as strings, so to save objects, you must serialize them to a string using `JSON.stringify()`. You can then retrieve them in another file (or another part of the same file) by parsing the stored string back into objects with `JSON.parse()`.
+
+### Steps to Pass a List of Objects Using sessionStorage
+
+#### 1. Define and Store the Data
+In the first file, or a part of your application, serialize your list of objects and store it in `sessionStorage`. For example:
+
+```javascript
+// Assume you have a list of objects
+let exercises = [
+    { name: "Push-ups", duration: 30, description: "Do as many push-ups as you can in 30 seconds." },
+    { name: "Plank", duration: 45, description: "Hold a plank position for 45 seconds." },
+    { name: "Squats", duration: 30, description: "Perform squats for 30 seconds." }
+];
+
+// Serialize and store it in sessionStorage
+sessionStorage.setItem('exercises', JSON.stringify(exercises));
+```
+
+#### 2. Retrieve and Use the Data
+In the second file, or another part of your application, retrieve the string from `sessionStorage`, parse it to get the original list of objects, and use it as needed:
+
+```javascript
+// Retrieve the data
+let storedExercises = sessionStorage.getItem('exercises');
+
+// Check if there's any data
+if (storedExercises) {
+    // Parse the JSON string back into an array of objects
+    let exercises = JSON.parse(storedExercises);
+
+    // Now you can use 'exercises' as a normal array of objects
+    console.log(exercises);
+
+    exercises.forEach(exercise => {
+        console.log(`${exercise.name}: ${exercise.description} for ${exercise.duration} seconds.`);
+    });
+} else {
+    console.error('No exercises found in sessionStorage.');
+}
+```
+
+### Considerations and Best Practices
+
+- **Session Storage Scope**: `sessionStorage` is limited to the current browser tab. Data stored in one tab will not be accessible from another tab or another window.
+- **Storage Limits**: The storage capacity for `sessionStorage` is limited (usually around 5MB). Be mindful of this if you're storing a large amount of data.
+- **Data Persistence**: Data in `sessionStorage` persists only for the duration of the page session. It is cleared when the tab or the browser is closed.
+- **Security and Privacy**: Since data stored in `sessionStorage` can be easily accessed via JavaScript, it should not be used to store sensitive information.
+- **Browser Compatibility**: `sessionStorage` is widely supported in modern browsers, but always consider your target audience and their potential browser usage. For critical features, ensure to have a fallback mechanism.
+
+Using `sessionStorage` is a simple and effective way to pass data between different parts of your JavaScript application during a single browser session.

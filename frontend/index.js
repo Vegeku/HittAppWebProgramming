@@ -1,5 +1,6 @@
 'use strict';
 
+
 const el = {};
 
 const listofExercises = { exercises: [] };
@@ -22,14 +23,13 @@ async function loadWorkouts() {
 
 function showWorkouts(workouts, where) {
   for (const workout of workouts) {
-    console.log(workouts);
     const li = document.createElement('li');
 
 
     const em = document.createElement('workout-card');
     em.textContent = workout.name;
     em.duration = workout.duration;
-    em.diff = workout.difficulty; 
+    em.diff = workout.difficulty;
     em.url = `./workout/${workout.id}`;
 
     li.append(em);
@@ -40,7 +40,7 @@ function showWorkouts(workouts, where) {
 function errorChecking() {
   el.error.textContent = '';
   const nameOfWorkout = el.workoutName.value.trim();
-  if (listofExercises.exercises.length !== 0 && nameOfWorkout !== '' && JSON.parse(listofExercises.exercises[0]).name !== 'Rest' && nameOfWorkout.length <= 20) {
+  if (listofExercises.exercises.length !== 0 && nameOfWorkout !== '' && listofExercises.exercises[0].name !== 'Rest' && nameOfWorkout.length <= 20) {
     el.error.style.display = 'none';
     return true;
   } else {
@@ -51,7 +51,7 @@ function errorChecking() {
     if (nameOfWorkout === '') {
       el.error.textContent += 'Please add a name to the workout. ';
     }
-    if (JSON.parse(listofExercises.exercises[0]).name === 'Rest') {
+    if (listofExercises.exercises[0].name === 'Rest') {
       el.error.textContent += 'First exercise cannot be a rest. ';
     }
     if (nameOfWorkout.length > 20) {
@@ -61,14 +61,18 @@ function errorChecking() {
 }
 
 async function saveWorkout() {
-  listofExercises.exercises = listofExercises.exercises.filter((exercise) => exercise != null).map((exercise) => JSON.stringify(exercise));
+  listofExercises.exercises = listofExercises.exercises.filter((exercise) => exercise != null);
   const exercisesList = document.querySelectorAll('exercise-info');
   for (let i = 0; i < listofExercises.exercises.length; i++) {
     exercisesList[i].index = i;
   }
-  console.log(listofExercises.exercises);
   if (errorChecking()) {
-    const payload = { name: (el.workoutName.value).trim(), difficulty: (el.workoutDiff.value).trim(), duration: parseInt(el.totalTime.textContent), exercises: listofExercises.exercises };
+    const payload = {
+      name: el.workoutName.value.trim(),
+      difficulty: el.workoutDiff.value.trim(),
+      duration: parseInt(el.totalTime.textContent),
+      exercises: listofExercises.exercises,
+    };
     const response = await fetch('/workout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -77,6 +81,7 @@ async function saveWorkout() {
 
     if (response.ok) {
       cancelWorkout();
+      listofExercises.exercises = [];
       const workoutsList = await response.json();
       el.workoutList.replaceChildren();
       showWorkouts(workoutsList, el.workoutList);
@@ -85,42 +90,40 @@ async function saveWorkout() {
 }
 
 function deleteExercise(e) {
-  console.log(e.detail.index);
-  el.totalTime.textContent = parseInt(el.totalTime.textContent) - parseInt(JSON.parse(listofExercises.exercises[e.detail.index]).time);
+  e.target.remove();
+  el.totalTime.textContent = parseInt(el.totalTime.textContent) - parseInt(listofExercises.exercises[e.detail.index].time);
   listofExercises.exercises[e.detail.index] = null;
   el.nOfExercises.textContent = parseInt(el.nOfExercises.textContent) - 1;
 }
 
 
 function addtoList(e) {
-  console.log(e.target.textContent, e.target.desc, e.target.time);
+  console.log('add to list');
   const payload = { name: e.target.textContent, desc: e.target.desc, time: e.target.time };
-  listofExercises.exercises.push(JSON.stringify(payload));
+  listofExercises.exercises.push(payload);
   el.nOfExercises.textContent = parseInt(el.nOfExercises.textContent) + 1;
-  console.log(el.totalTime.textContent);
   el.totalTime.textContent = parseInt(el.totalTime.textContent) + parseInt(e.target.time);
+  console.log(listofExercises.exercises);
 }
 
 function addRest() {
   const exercise = document.createElement('exercise-info');
-  exercise.editable = 'true';
+  exercise.editable = 'create';
   exercise.textContent = 'Rest';
   exercise.desc = 'Rest';
-  exercise.index = listofExercises.exercises.length; ///add index
-  ///add index
-  el.exercises.append(exercise)
+  exercise.index = listofExercises.exercises.length;
+  el.exercises.append(exercise);
   exercise.addEventListener('deleteExercise', deleteExercise);
-  exercise.addEventListener('addExercise', addtoList);
+  exercise.addEventListener('editExercise', addtoList);
 }
 
 function addExercise() {
   const exercise = document.createElement('exercise-info');
-  exercise.editable = 'true';
+  exercise.editable = 'create';
   exercise.index = listofExercises.exercises.length;
-  el.exercises.prepend(exercise)
+  el.exercises.append(exercise);
   exercise.addEventListener('deleteExercise', deleteExercise);
-  exercise.addEventListener('addExercise', addtoList);
-
+  exercise.addEventListener('editExercise', addtoList);
 }
 
 function addWorkout() {
@@ -145,7 +148,7 @@ function loadElements() {
   el.saveWorkout = document.querySelector('#saveWorkout');
   el.cancelWorkout = document.querySelector('#cancelWorkout');
   el.totalTime = document.querySelector('#totalTime');
-  el.workouts = document.querySelector('#workouts'); 
+  el.workouts = document.querySelector('#workouts');
   el.exercises = document.querySelector('#exercises');
   el.addWorkoutPage = document.querySelector('#workoutPage');
   el.nOfExercises = document.querySelector('#numberOfexercises');

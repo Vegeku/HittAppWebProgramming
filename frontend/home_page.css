@@ -1,4 +1,4 @@
-/* Media query for desktops and larger screens */
+
 * {
     text-align: center;
     font-family: sans-serif;
@@ -9,9 +9,7 @@
     color: grey;
 }
 
-/* #addWorkout {
-    display: block;
-} */
+
 
 #overview,
 #workoutPage {
@@ -62,7 +60,6 @@ h1 {
 button {
     border-radius: 0.5rem;
     font-size: 1rem;
-    /* display: inline-flex; */
     height: 4rem;
     padding: 0;
     color: white;
@@ -78,7 +75,6 @@ button {
 #send:hover,
 button:hover {
     background-color: #001C3144;
-    /* box-shadow: 0em 0em 0.1rem 0.1rem rgb(0,0,0); */
 }
 
 #send:active,
@@ -89,7 +85,6 @@ button:active {
 #send:disabled,
 button:disabled {
     background-color: #b3cae0;
-    /* box-shadow: 0em 0em 0.1rem 0.1rem rgb(0,0,0); */
 }
 
 .button__text,
@@ -102,7 +97,7 @@ button:disabled {
 
 ul {
     display: grid;
-    /* grid-auto-flow: column; */
+
     grid-template-columns: repeat(auto-fill, 20em);
     justify-content: center;
 }
@@ -119,7 +114,7 @@ dialog {
 @media (max-width: 38em) {
     ul {
         display: grid;
-        /* grid-auto-flow: row; */
+
         grid-template-columns: none;
         grid-template-rows: 1fr;
     }

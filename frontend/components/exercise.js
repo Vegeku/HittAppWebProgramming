@@ -1,18 +1,21 @@
 'use strict';
 
+/**
+ * Represents an Exercise custom element.
+ * @extends HTMLElement
+ */
 export class Exercise extends HTMLElement {
   /**
-     * connectedCallback
-     * When the element is added to the
-     * DOM display the readonly UI
-     */
+   * Lifecycle method called when the element is connected to the DOM.
+   * @returns {Promise<void>}
+   */
   async connectedCallback() {
     this.shadow = this.attachShadow({ mode: 'open' });
     const templateURL = import.meta.url.replace('.js', '.html');
     this.templatePage = await fetch(templateURL);
     this.shadow.innerHTML = await this.templatePage.text();
 
-    if (this.editable == 'true') {
+    if (this.editable === 'true' || this.editable === 'create') {
       this.editExercise();
     } else if (this.editable === 'readonly') {
       this.readonly();
@@ -22,15 +25,16 @@ export class Exercise extends HTMLElement {
   }
 
   /**
-     * Empty the shadow DOM by selecting
-     * everything that's neither template
-     * nor style and removing all matches.
-     */
+   * Clears the shadow DOM by removing all elements except template and style.
+   */
   clearShadow() {
     const elems = this.shadow.querySelectorAll(':not(template, style)');
     elems.forEach(elem => elem.remove());
   }
 
+  /**
+   * Displays the exercise in read-only mode.
+   */
   showExercise() {
     this.clearShadow();
     const readonly = this.shadow.querySelector('#showExecise');
@@ -48,20 +52,30 @@ export class Exercise extends HTMLElement {
     editButton.addEventListener('click', this.editExercise.bind(this));
   }
 
+  /**
+   * Displays the exercise in read-only mode without any buttons.
+   */
   readonly() {
     this.showExercise();
     const buttons = this.shadow.querySelectorAll('button');
     buttons.forEach((button) => { button.remove(); });
   }
 
+  /**
+   * Cancels the current element and either removes it or shows the exercise.
+   */
   cancelElement() {
     if (this.editable === 'true') {
       this.remove();
-    } else { 
+    } else {
       this.showExercise();
     }
   }
 
+  /**
+   * Performs error checking on the exercise form.
+   * @returns {boolean} - True if there are no errors, false otherwise.
+   */
   errorChecking() {
     const error = this.shadow.querySelector('#error');
     error.textContent = '';
@@ -85,6 +99,9 @@ export class Exercise extends HTMLElement {
     }
   }
 
+  /**
+   * Displays the exercise in edit mode.
+   */
   editExercise() {
     this.clearShadow();
     const edit = this.shadow.querySelector('#addExercise');
@@ -103,33 +120,32 @@ export class Exercise extends HTMLElement {
     cancel.addEventListener('click', this.cancelElement.bind(this));
   }
 
+  /**
+   * Saves the edited exercise.
+   */
   saveExerciseEdit() {
-    const error = this.shadow.querySelector('#error');
     const newTime = this.shadow.querySelector('time-setter');
     const newDesc = this.shadow.querySelector('#description');
     const newName = this.shadow.querySelector('#exercise');
+    const oldTime = this.time;
     this.time = newTime.time;
     this.desc = newDesc.value.trim();
     this.textContent = newName.value.trim();
-    const editEvent = new CustomEvent('editExercise', {
-      bubbles: true,
-      detail: { index: this.index, time: this.time, desc: this.desc },
-    });
-
-    const addEvent = new CustomEvent('addExercise', {
-      bubbles: true,
-      detail: {time: this.time, desc: this.desc, name: this.textContent},
-    });
 
     if (this.errorChecking()) {
+      const editEvent = new CustomEvent('editExercise', {
+        bubbles: true,
+        detail: { index: this.index, currentTime: oldTime, time: this.time, desc: this.desc },
+      });
       this.dispatchEvent(editEvent);
-      this.dispatchEvent(addEvent);
       this.showExercise();
     }
   }
 
+  /**
+   * Deletes the exercise.
+   */
   deleteExercise() {
-    this.remove();
     const event = new CustomEvent('deleteExercise', {
       bubbles: true,
       detail: { index: this.index },
@@ -137,39 +153,70 @@ export class Exercise extends HTMLElement {
     this.dispatchEvent(event);
   }
 
+  /**
+   * Gets the editable attribute value.
+   * @returns {string} - The value of the editable attribute.
+   */
   get editable() {
     return this.getAttribute('editable');
   }
 
+  /**
+   * Sets the editable attribute value.
+   * @param {string} value - The value to set for the editable attribute.
+   */
   set editable(value) {
-    if (value === 'true' || value === 'false' || value === 'readonly') {
+    if (value === 'true' || value === 'false' || value === 'readonly' || value === 'create') {
       this.setAttribute('editable', value);
     } else {
       this.setAttribute('editable', false);
     }
   }
 
-
+  /**
+   * Gets the index attribute value.
+   * @returns {string} - The value of the index attribute.
+   */
   get index() {
     return this.getAttribute('index');
   }
 
+  /**
+   * Sets the index attribute value.
+   * @param {string} value - The value to set for the index attribute.
+   */
   set index(value) {
     this.setAttribute('index', value);
   }
 
+  /**
+   * Gets the desc attribute value.
+   * @returns {string} - The value of the desc attribute.
+   */
   get desc() {
     return this.getAttribute('desc');
   }
 
+  /**
+   * Sets the desc attribute value.
+   * @param {string} value - The value to set for the desc attribute.
+   */
   set desc(value) {
     this.setAttribute('desc', value);
   }
 
+  /**
+   * Gets the time attribute value.
+   * @returns {string} - The value of the time attribute.
+   */
   get time() {
     return this.getAttribute('time');
   }
 
+  /**
+   * Sets the time attribute value.
+   * @param {string} value - The value to set for the time attribute.
+   */
   set time(value) {
     this.setAttribute('time', value);
   }

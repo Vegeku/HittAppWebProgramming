@@ -1,17 +1,9 @@
 "use strict";
-/**
- * EditableExercise
- * A exercise that can be updated by the user and saved to the server
- */
+
 export class WorkoutCard extends HTMLElement {
 
     fullWorkout = {};
 
-    /**
-     * connectedCallback
-     * When the element is added to the
-     * DOM display the readonly UI
-     */
     async connectedCallback() {
         this.shadow = this.attachShadow({ mode: 'open' });
         const templateURL = import.meta.url.replace('.js', '.html');
@@ -21,37 +13,19 @@ export class WorkoutCard extends HTMLElement {
         this.showReadonly();
     }
 
-    /**
-     * Empty the shadow DOM by selecting
-     * everything that's neither template
-     * nor style and removing all matches. 
-     */
+
     clearShadow() {
         const elems = this.shadow.querySelectorAll(':not(template, style)');
         elems.forEach(elem => elem.remove());
     }
 
 
-    buttonSoundEffect() {
-        const audio = new Audio("../../audio/click_noise.mp3");
-        audio.play();
-    }
-
-    addAudioTobutton() {
-        const buttons = this.shadow.querySelectorAll('button');
-        buttons.forEach((button) => { button.addEventListener('click', this.buttonSoundEffect.bind(this)) });
-    }
-
-    /**
-     * Show the UI for when the EM is in 'readonly mode'
-     */
 
     showReadonly() {
         this.clearShadow();
         const readonly = this.shadow.querySelector('#showWorkout');
         const clone = readonly.content.cloneNode(true);
         this.shadow.append(clone);
-        this.addAudioTobutton();
         const name = this.shadow.querySelector('h4');
         const duration = this.shadow.querySelector('.duration');
         const diff = this.shadow.querySelector('#diff');
@@ -66,15 +40,42 @@ export class WorkoutCard extends HTMLElement {
         this.addEventListener('click', this.classList.add('show-buttons'));
         del.addEventListener('click', this.delete.bind(this));
         edit.addEventListener('click', this.showEdit.bind(this));
-        // view.addEventListener('click', this.showDetails.bind(this));
     }
 
     async getFullWorkout() {
         const workoutData = await this.getWorkoutData();
+        console.log(workoutData.exercises);
         const workout = JSON.parse(workoutData.exercises);
-        const fullWorkout = workout.exercises.map((exercise) => JSON.parse(exercise));
+        const fullWorkout = workout.exercises;
         return fullWorkout;
     }
+
+    errorChecking() {
+        const error = this.shadow.querySelector('#error');
+        console.log(error);
+        error.textContent = '';
+        const workoutName = this.shadow.querySelector('#workoutName').value.trim();
+        const workoutDiff = this.shadow.querySelector('.level').value;
+
+        if (workoutName === '') {
+            error.textContent += 'Workout name cannot be empty. ';
+        }
+
+        if (workoutDiff === '') {
+            error.textContent += 'Workout difficulty cannot be empty. ';
+        }
+
+        if (this.fullWorkout.filter((exercise) => exercise != 'null').length === 1) {
+            error.textContent += 'Workout must have at least one exercise. ';
+        }
+
+        if (workoutName !== '' && workoutDiff !== '' && this.fullWorkout.length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     getExercises() {
         const listofExercises = this.shadow.querySelector('ul');
@@ -86,7 +87,7 @@ export class WorkoutCard extends HTMLElement {
             exerc.index = i;
             exerc.editable = false;
             exerc.addEventListener("deleteExercise", this.deleteExercise.bind(this));
-            exerc.addEventListener("editExercise", (e) => {this.editExercise(e,false);});
+            exerc.addEventListener("editExercise", (e) => { this.editExercise(e, false); });
             listofExercises.append(exerc);
         }
         const onlyExercises = this.fullWorkout.filter((exercise) => exercise.name != 'Rest');
@@ -96,60 +97,69 @@ export class WorkoutCard extends HTMLElement {
     updateWorkout(exercise, action) {
         const totalDur = this.shadow.querySelector('#totalTime');
         const nOfEx = this.shadow.querySelector('#numberOfexercises');
-        if ((this.fullWorkout[exercise.index].name).trim() != 'Rest' && action == 'delete') {
-            nOfEx.textContent = parseInt(nOfEx.textContent) - 1;
-        } else if (action == 'add') {
-            nOfEx.textContent = parseInt(nOfEx.textContent) + 1;
+        let totalDuration = parseInt(totalDur.textContent);
+        let exerciseCount = parseInt(nOfEx.textContent);
+        console.log(totalDur);
+
+        if (action === 'delete') {
+            totalDuration -= parseInt(exercise.time);
+            exerciseCount--;
+        } else if (action === 'add') {
+            totalDuration += parseInt(exercise.time);
+            exerciseCount++;
         }
 
-        if (action == 'delete') {
-            totalDur.textContent = parseInt(totalDur.textContent) - this.fullWorkout[exercise.index].time;
-        } else {
-            totalDur.textContent = parseInt(totalDur.textContent) + parseInt(this.fullWorkout[exercise.index].time);
-        }
+        totalDur.textContent = totalDuration;
+        nOfEx.textContent = exerciseCount;
     }
+
+    isOnlyExerciseLeft() {
+        const exercises = this.fullWorkout.filter((exercise) => exercise !== null && exercise.name.trim() !== 'Rest');
+        return exercises.length === 1;
+    }
+
 
     deleteExercise(e) {
         const workout = this.fullWorkout.filter((exercise) => exercise != null).map((exercise) => JSON.stringify(exercise));
-        console.log("exercise deleted");
-        if (workout.length  > 1) {
-            //fix this
+        if (!this.errorChecking()) {
+            console.log("exercise deleted");
+            e.target.remove();
             this.updateWorkout(e.target, 'delete');
             this.fullWorkout[e.target.index] = null;
         }
     }
 
-    editExercise(e,adding) {
+    editExercise(e, adding) {
         if (adding == false) {
             const exercise = this.fullWorkout[e.target.index];
             this.updateWorkout(e.target, 'delete');
             exercise.name = e.target.textContent;
             exercise.desc = e.target.desc;
             exercise.time = e.target.time;
-            this.updateWorkout(e.target);
-        } 
+            this.updateWorkout(e.target, 'add');
+        }
         else if (adding == true) {
             const exerc = { name: e.target.textContent, desc: e.target.desc, time: e.target.time };
             this.fullWorkout.push(exerc);
-            this.updateWorkout(e.target,"add");
+            this.updateWorkout(e.target, "add");
 
         }
     }
+
 
     addExercise() {
         const listofExercises = this.shadow.querySelector('ul');
         const exerc = document.createElement('exercise-info');
         exerc.addEventListener("deleteExercise", this.deleteExercise.bind(this));
-        exerc.addEventListener("editExercise", (e) => {this.editExercise(e,true);} );
+        exerc.addEventListener("editExercise", (e) => { this.editExercise(e, true); });
         exerc.index = this.fullWorkout.length;
         exerc.editable = 'true';
         listofExercises.append(exerc);
     }
 
     async showEdit() {
-        const showEdit = this.shadow.querySelector('dialog');
+        const showEdit = this.shadow.querySelector('#showEdit');
         showEdit.showModal();
-        this.addAudioTobutton();
         const addExercise = this.shadow.querySelectorAll('button')[1];
         const addRest = this.shadow.querySelectorAll('button')[2];
         const cancel = this.shadow.querySelectorAll('button')[4];
@@ -167,15 +177,15 @@ export class WorkoutCard extends HTMLElement {
         cancel.addEventListener("click", this.cancel.bind(this));
         save.addEventListener("click", this.save.bind(this));
         addExercise.addEventListener("click", this.addExercise.bind(this));
-        addRest.addEventListener("click",this.addRest.bind(this));
+        addRest.addEventListener("click", this.addRest.bind(this));
         return this.shadow.querySelectorAll('exercise-info');
     }
 
-    addRest () {
+    addRest() {
         const listofExercises = this.shadow.querySelector('ul');
         const rest = document.createElement('exercise-info');
         rest.addEventListener("deleteExercise", this.deleteExercise.bind(this));
-        rest.addEventListener("editExercise", (e) => {this.editExercise(e,true);} );
+        rest.addEventListener("editExercise", (e) => { this.editExercise(e, true); });
         rest.index = this.fullWorkout.length;
         rest.textContent = 'Rest';
         rest.desc = 'relax';
@@ -184,52 +194,55 @@ export class WorkoutCard extends HTMLElement {
         listofExercises.append(rest);
     }
 
-    // async showDetails() {
-    //     const exercises = await this.showEdit();
-    //     const buttons = this.shadow.querySelectorAll('button');
-    //     const input = this.shadow.querySelector('input');
-    //     input.disabled = true;
-    //     const diff = this.shadow.querySelector('.level');
-    //     diff.disabled = true;
-    //     buttons[3].textContent = 'Show less';
-    //     buttons[3].classList.add('view'); 
-    //     for (let i = 0; i < buttons.length - 1; i++) {
-    //         buttons[i].remove()
-    //     }
-    //     exercises.forEach((exercise) => exercise.editable = "readonly");
-    // }
+
+    startInitialTimer() {
+        const starting = this.shadow.querySelector('#startWorkout');
+        starting.showModal();
+        const initialTimer = this.shadow.querySelector('#startWorkout > p');
+
+        let currentValue = parseInt(initialTimer.textContent);
+        initialTimer.textContent = "3";
+        let interval = setInterval(() => {
+            if (currentValue > 0) {
+                console.log(currentValue);
+                currentValue--;
+                initialTimer.textContent = currentValue;
+            } else {
+                clearInterval(interval);
+                initialTimer.textContent = "start Workout!";
+            }
+        }, 1000);
+    }
 
     async startWorkout() {
+        const starting = this.shadow.querySelector('#startWorkout');
+        this.startInitialTimer()
         const values = await this.getWorkoutData();
-        sessionStorage.setItem('exercises', values.exercises);
+        console.log(values);
+        const exercs = JSON.stringify(this.fullWorkout);
+        console.log(JSON.stringify(this.fullWorkout));
+        sessionStorage.setItem('exercises', exercs);
         sessionStorage.setItem('totalTime', values.duration);
 
-        window.location.href = "startWorkout.html"
+
+        setTimeout(() => { window.location.href = "startWorkout.html" }, 5000);
     }
 
 
-    /**
-     * Show the UI for when the EM is in 'edit mode'
-     */
+
 
 
     async cancel() {
-        const cancel = this.shadow.querySelector('dialog');
+        const cancel = this.shadow.querySelector('#showEdit');
         console.log(cancel);
         cancel.close();
         this.showReadonly();
     }
 
-    /**
-     * getter for the url attribute, necessary for the save method
-     */
     get url() {
         return this.getAttribute('url');
     }
 
-    /**
-     * getter for the url attribute, necessary for the save method
-     */
     set url(value) {
         if (value) {
             this.setAttribute('url', value);
@@ -260,7 +273,7 @@ export class WorkoutCard extends HTMLElement {
     }
 
     set diff(value) {
-        if (value ==='easy' || value==='medium' || value==='hard') {
+        if (value === 'easy' || value === 'medium' || value === 'hard') {
             this.setAttribute('diff', value);
         } else {
             this.setAttribute('diff', 'easy');
@@ -271,7 +284,6 @@ export class WorkoutCard extends HTMLElement {
         const response = await fetch(this.url);
         if (response.ok) {
             const values = await response.json();
-            console.log(values);
             return values;
         }
         return {};
@@ -288,16 +300,19 @@ export class WorkoutCard extends HTMLElement {
         await fetch(this.url, options);
     }
 
-    /**
-     * Need to modify that
-     */
     async save() {
+        console.log("save");
+
+        if (!this.errorChecking()) {
+            return;
+        }
+
         const method = 'PUT';
         const headers = { 'Content-Type': 'application/json' };
         const name = this.shadow.querySelector('#workoutName').value;
         const difficulty = this.shadow.querySelector('.level').value;
         const duration = this.shadow.querySelector('#totalTime').textContent;
-        const exercises = this.fullWorkout.filter((exercise) => exercise != null).map((exercise) => JSON.stringify(exercise));
+        const exercises = this.fullWorkout.filter((exercise) => exercise != null);
         const body = JSON.stringify({ name, difficulty, duration, exercises });
         const options = { method, headers, body };
         const response = await fetch(this.url, options);
@@ -305,7 +320,7 @@ export class WorkoutCard extends HTMLElement {
             this.textContent = name;
             this.diff = difficulty;
             this.duration = duration;
-            this.fullWorkout = exercises.map((exercise) => JSON.parse(exercise));
+            this.fullWorkout = exercises;
             this.showReadonly();
         } else {
             console.error('Failed to save exercise');
