@@ -121,7 +121,7 @@ export class WorkoutCard extends HTMLElement {
 
     deleteExercise(e) {
         const workout = this.fullWorkout.filter((exercise) => exercise != null).map((exercise) => JSON.stringify(exercise));
-        if (!this.errorChecking()) {
+        if (this.errorChecking()) {
             console.log("exercise deleted");
             e.target.remove();
             this.updateWorkout(e.target, 'delete');
