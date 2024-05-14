@@ -86,31 +86,12 @@ export class WorkoutCard extends HTMLElement {
             exerc.time = this.fullWorkout[i].time;
             exerc.index = i;
             exerc.editable = false;
-            exerc.addEventListener("deleteExercise", this.deleteExercise.bind(this));
-            exerc.addEventListener("editExercise", (e) => { this.editExercise(e, false); });
+            // exerc.addEventListener("deleteExercise", this.deleteExercise.bind(this));
+            // exerc.addEventListener("editExercise", (e) => { this.editExercise(e, false); });
             listofExercises.append(exerc);
         }
         const onlyExercises = this.fullWorkout.filter((exercise) => exercise.name != 'Rest');
         return onlyExercises;
-    }
-
-    updateWorkout(exercise, action) {
-        const totalDur = this.shadow.querySelector('#totalTime');
-        const nOfEx = this.shadow.querySelector('#numberOfexercises');
-        let totalDuration = parseInt(totalDur.textContent);
-        let exerciseCount = parseInt(nOfEx.textContent);
-        console.log(totalDur);
-
-        if (action === 'delete') {
-            totalDuration -= parseInt(exercise.time);
-            exerciseCount--;
-        } else if (action === 'add') {
-            totalDuration += parseInt(exercise.time);
-            exerciseCount++;
-        }
-
-        totalDur.textContent = totalDuration;
-        nOfEx.textContent = exerciseCount;
     }
 
     isOnlyExerciseLeft() {
@@ -119,43 +100,6 @@ export class WorkoutCard extends HTMLElement {
     }
 
 
-    deleteExercise(e) {
-        const workout = this.fullWorkout.filter((exercise) => exercise != null).map((exercise) => JSON.stringify(exercise));
-        if (this.errorChecking()) {
-            console.log("exercise deleted");
-            e.target.remove();
-            this.updateWorkout(e.target, 'delete');
-            this.fullWorkout[e.target.index] = null;
-        }
-    }
-
-    editExercise(e, adding) {
-        if (adding == false) {
-            const exercise = this.fullWorkout[e.target.index];
-            this.updateWorkout(e.target, 'delete');
-            exercise.name = e.target.textContent;
-            exercise.desc = e.target.desc;
-            exercise.time = e.target.time;
-            this.updateWorkout(e.target, 'add');
-        }
-        else if (adding == true) {
-            const exerc = { name: e.target.textContent, desc: e.target.desc, time: e.target.time };
-            this.fullWorkout.push(exerc);
-            this.updateWorkout(e.target, "add");
-
-        }
-    }
-
-
-    addExercise() {
-        const listofExercises = this.shadow.querySelector('ul');
-        const exerc = document.createElement('exercise-info');
-        exerc.addEventListener("deleteExercise", this.deleteExercise.bind(this));
-        exerc.addEventListener("editExercise", (e) => { this.editExercise(e, true); });
-        exerc.index = this.fullWorkout.length;
-        exerc.editable = 'true';
-        listofExercises.append(exerc);
-    }
 
     async showEdit() {
         const showEdit = this.shadow.querySelector('#showEdit');
@@ -179,19 +123,6 @@ export class WorkoutCard extends HTMLElement {
         addExercise.addEventListener("click", this.addExercise.bind(this));
         addRest.addEventListener("click", this.addRest.bind(this));
         return this.shadow.querySelectorAll('exercise-info');
-    }
-
-    addRest() {
-        const listofExercises = this.shadow.querySelector('ul');
-        const rest = document.createElement('exercise-info');
-        rest.addEventListener("deleteExercise", this.deleteExercise.bind(this));
-        rest.addEventListener("editExercise", (e) => { this.editExercise(e, true); });
-        rest.index = this.fullWorkout.length;
-        rest.textContent = 'Rest';
-        rest.desc = 'relax';
-        rest.time = 30;
-        rest.editable = 'true';
-        listofExercises.append(rest);
     }
 
 

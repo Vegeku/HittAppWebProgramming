@@ -40,16 +40,16 @@ export class Exercise extends HTMLElement {
     const readonly = this.shadow.querySelector('#showExecise');
     const clone = readonly.content.cloneNode(true);
     this.shadow.append(clone);
-    const delButton = this.shadow.querySelectorAll('button')[0];
-    const editButton = this.shadow.querySelectorAll('button')[1];
+    // const delButton = this.shadow.querySelectorAll('button')[0];
+    // const editButton = this.shadow.querySelectorAll('button')[1];
     const name = this.shadow.querySelectorAll('p')[0];
     const description = this.shadow.querySelectorAll('p')[1];
     const time = this.shadow.querySelectorAll('p')[2];
     name.textContent = this.textContent;
     description.textContent = this.desc;
     time.textContent = this.time;
-    delButton.addEventListener('click', this.deleteExercise.bind(this));
-    editButton.addEventListener('click', this.editExercise.bind(this));
+    // delButton.addEventListener('click', this.deleteExercise.bind(this));
+    // editButton.addEventListener('click', this.editExercise.bind(this));
   }
 
   /**
@@ -61,16 +61,6 @@ export class Exercise extends HTMLElement {
     buttons.forEach((button) => { button.remove(); });
   }
 
-  /**
-   * Cancels the current element and either removes it or shows the exercise.
-   */
-  cancelElement() {
-    if (this.editable === 'true') {
-      this.remove();
-    } else {
-      this.showExercise();
-    }
-  }
 
   /**
    * Performs error checking on the exercise form.
@@ -142,16 +132,6 @@ export class Exercise extends HTMLElement {
     }
   }
 
-  /**
-   * Deletes the exercise.
-   */
-  deleteExercise() {
-    const event = new CustomEvent('deleteExercise', {
-      bubbles: true,
-      detail: { index: this.index },
-    });
-    this.dispatchEvent(event);
-  }
 
   /**
    * Gets the editable attribute value.
