@@ -1,15 +1,23 @@
-'use strict';
-
-
 const el = {};
 
-const listofExercises = { exercises: [] };
+let listofExercises = {};
+let listOfExIds;
 
-function buttonSoundEffect() {
-  const audio = new Audio('/audio/click_noise.mp3');
-  audio.play();
+async function loadWorkouts() {
+  const response = await fetch('workouts');
+  let workouts;
+  if (response.ok) {
+    workouts = await response.json();
+    if (workouts.length !== 0) {
+      const info = document.querySelector('#info');
+      info.style.display = 'none';
+      el.workoutList.replaceChildren();
+      showWorkouts(workouts, el.workoutList);
+    }
+  } else {
+    workouts = [{ exercise: 'failed to load workouts :-(' }];
+  }
 }
-
 
 function showWorkouts(workouts, where) {
   for (const workout of workouts) {
@@ -27,189 +35,141 @@ function showWorkouts(workouts, where) {
   }
 }
 
-async function loadWorkouts() {
-  const response = await fetch('workouts');
-  let workouts;
-  if (response.ok) {
-    workouts = await response.json();
-    console.log(workouts);
+function errorChecking() {
+  el.error.textContent = '';
+  const nameOfWorkout = el.workoutName.value.trim();
+  listOfExIds = Object.keys(listofExercises);
+  if (listOfExIds.length !== 0 && nameOfWorkout !== '' && listofExercises[listOfExIds[0]].name !== 'Rest' && nameOfWorkout.length <= 20) {
+    el.error.style.display = 'none';
+    return true;
   } else {
-    workouts = [{ exercise: 'failed to load exercises :-(' }];
+    el.error.style.display = 'block';
+    if (listOfExIds.length === 0) {
+      el.error.textContent += 'Please add exercises to the workout. ';
+    }
+    if (nameOfWorkout === '') {
+      el.error.textContent += 'Please add a name to the workout. ';
+    }
+    if (listofExercises[listOfExIds[0]].name === 'Rest') {
+      el.error.textContent += 'First exercise cannot be a rest. ';
+    }
+    if (nameOfWorkout.length > 20) {
+      el.error.textContent += 'Workout name is too long. ';
+    }
   }
-  el.workoutList.replaceChildren();
-  showWorkouts(workouts, el.workoutList);
 }
 
-async function addWorkoutToServer() {
-  el.error.textContent = '';
-  const duration = document.querySelector('#totalTime');
-  const workoutName = document.querySelector('#workoutName');
-  const workoutDiff = document.querySelector('#level');
-  if (listofExercises.exercises.length !== 0 && (workoutName.value).trim() && (workoutDiff.value).trim()) {
-    el.error.textContent = '';
-    const payload = { name: (workoutName.value).trim(), difficulty: (workoutDiff.value).trim(), duration: parseInt(duration.textContent), exercises: listofExercises.exercises };
-    const response = await fetch('workout', {
+async function saveWorkout() {
+  if (errorChecking()) {
+    const payload = {
+      name: el.workoutName.value.trim(),
+      difficulty: el.workoutDiff.value.trim(),
+      duration: parseInt(el.totalTime.textContent),
+      exercises: JSON.stringify(listofExercises),
+    };
+    const response = await fetch('/workout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
 
     if (response.ok) {
-      removeWorkoutInput();
+      cancelWorkout();
+      listofExercises = {};
       const workoutsList = await response.json();
       el.workoutList.replaceChildren();
       showWorkouts(workoutsList, el.workoutList);
     }
-  } else if (listofExercises.exercises.length === 0) {
-    el.error.textContent = `${el.error.textContent} \n There are no exercises`;
-  }
-  if (!(workoutName.value).trim()) {
-    el.error.textContent = `${el.error.textContent} \n You haven't given a name to your workout`;
   }
 }
 
-function addNewRest() {
-  const timeInput = document.querySelector('time-setter');
-  const exercises = document.querySelector('#exercises');
-  const totalTime = document.querySelector('#totalTime');
-  el.error.textContent = '';
-  if (timeInput.time !== 0) {
-    el.error.textContent = '';
-    totalTime.textContent = parseInt(totalTime.textContent) + parseInt(timeInput.time);
-    const newRest = document.createElement('section');
-    const time = document.createElement('p');
-    const restLabel = document.createElement('p');
-    restLabel.textContent = 'Rest: ';
-    time.textContent = timeInput.time;
-    const payload = { name: 'Rest', desc: 'relax', time: timeInput.time };
-    listofExercises.exercises.push(JSON.stringify(payload));
-    newRest.append(restLabel, time);
-    exercises.append(newRest);
-    el.rest.remove();
-    el.addExercise.disabled = false;
-    el.addRest.disabled = false;
+
+function addtoListOrEdit(e) {
+  if (e.target.editable === 'create') {
+    const payload = { name: e.target.textContent, desc: e.target.desc, time: e.target.time };
+    listofExercises[e.target.index] = payload;
+    if (e.target.textContent !== 'Rest') {
+      el.nOfExercises.textContent = parseInt(el.nOfExercises.textContent) + 1;
+    }
+    el.totalTime.textContent = parseInt(el.totalTime.textContent) + parseInt(e.target.time);
+    console.log(listofExercises);
+    e.target.editable = 'false';
   } else {
-    el.error.textContent = 'The rest cannot be 0';
+    listofExercises[e.target.index] = { name: e.target.textContent, desc: e.target.desc, time: e.target.time };
+    el.totalTime.textContent = parseInt(el.totalTime.textContent) - parseInt(e.detail.currentTime) + parseInt(e.target.time);
   }
 }
 
-function addNewExercise() {
-  const exName = document.querySelector('#exercise');
-  const description = document.querySelector('#description');
-  const timeInput = document.querySelector('time-setter');
-  const exInfo = document.querySelector('#infoInput');
-  const exercises = document.querySelector('#exercises');
-  const numberOfExercises = document.querySelector('#numberOfexercises');
-  const totalTime = document.querySelector('#totalTime');
-  el.error.textContent = '';
-  if ((exName.value).trim() !== '' && (description.value).trim() !== '' && timeInput.time !== 0) {
-    el.error.textContent = '';
-    const payload = { name: (exName.value).trim(), desc: (description.value).trim(), time: timeInput.time };
-    numberOfExercises.textContent = parseInt(numberOfExercises.textContent) + 1;
-    totalTime.textContent = parseInt(totalTime.textContent) + parseInt(timeInput.time);
-    const exercise = document.createElement('section');
-    const ex = document.createElement('p');
-    ex.textContent = (exName.value).trim();
-    const desc = document.createElement('p');
-    desc.textContent = (description.value).trim();
-    const time = document.createElement('p');
-    time.textContent = timeInput.time;
-    exercise.append(ex, desc, time);
-    exercises.append(exercise);
-    exInfo.remove();
-    el.addExercise.disabled = false;
-    el.addRest.disabled = false;
-    listofExercises.exercises.push(JSON.stringify(payload));
-  }
-  if (!(exName.value).trim()) {
-    el.error.textContent = `${el.error.textContent} \n You haven't given the name of the exercise.`;
-  }
-  if (!(description.value).trim()) {
-    el.error.textContent = `${el.error.textContent} \n You haven't given the description of the exercise.`;
-  }
-  if (timeInput.time === 0) {
-    el.error.textContent = `${el.error.textContent} \n You haven't given the time of the exercise.`;
-  }
-  console.log(listofExercises.exercises);
+function addRest() {
+  const exercise = document.createElement('exercise-info');
+  exercise.editable = 'create';
+  exercise.textContent = 'Rest';
+  exercise.desc = 'Rest';
+  exercise.index = crypto.randomUUID();
+  el.exercises.append(exercise);
+  exercise.addEventListener('deleteExercise', deleteExercise);
+  exercise.addEventListener('editExercise', addtoListOrEdit);
 }
 
-function loadExerciseInputs(e) {
-  el.overview = document.querySelector('#overview');
-  const exercisePage = document.querySelector('#chooseExercise');
-  const cloned = exercisePage.content.cloneNode(true);
-  el.overview.append(cloned);
-  e.target.disabled = true;
-  el.addRest.disabled = true;
-  const send = document.querySelector('#send');
-  el.exInfo = document.querySelector('#infoInput');
-  const cancel = document.querySelector('#cancelExercise');
-  cancel.addEventListener('click', () => { el.exInfo.remove(); e.target.disabled = false; el.addRest.disabled = false; });
-  cancel.addEventListener('click', buttonSoundEffect);
-  send.addEventListener('click', addNewExercise);
-  send.addEventListener('click', buttonSoundEffect);
+function addExercise() {
+  const exercise = document.createElement('exercise-info');
+  exercise.editable = 'create';
+  exercise.index = crypto.randomUUID();
+  el.exercises.append(exercise);
+  exercise.addEventListener('deleteExercise', deleteExercise);
+  exercise.addEventListener('editExercise', addtoListOrEdit);
 }
 
-function loadRestInput(e) {
-  const restInput = document.querySelector('#setRest');
-  const cloned = restInput.content.cloneNode(true);
-  el.overview.append(cloned);
-  el.rest = document.querySelector('#infoRestInput');
-  const cancel = document.querySelector('#cancelRest');
-  const addRest = document.querySelector('#sendRest');
-  e.target.disabled = true;
-  el.addExercise.disabled = true;
-  cancel.addEventListener('click', () => {
-    el.rest.remove();
-    e.target.disabled = false;
-    el.addExercise.disabled = false;
-  });
-  cancel.addEventListener('click', buttonSoundEffect);
-  addRest.addEventListener('click', addNewRest);
-  addRest.addEventListener('click', buttonSoundEffect);
+function deleteExercise(e) {
+  el.totalTime.textContent = parseInt(el.totalTime.textContent) - parseInt(e.target.time);
+  delete listofExercises[e.target.index];
+  if (e.target.textContent !== 'Rest') {
+    el.nOfExercises.textContent = parseInt(el.nOfExercises.textContent) - 1;
+  }
+  e.target.remove();
 }
 
-function removeWorkoutInput() {
-  const workout = document.querySelector('#workout');
-  workout.remove();
-  listofExercises.exercises = [];
-  el.addWorkoutBtn.disabled = false;
+function addWorkout() {
+  el.addWorkoutPage.showModal();
 }
 
-function loadWorkoutTemplate() {
-  const cloned = el.workoutPage.content.cloneNode(true);
-  el.workoutList.append(cloned);
-  el.addWorkoutBtn.disabled = true;
+function cancelWorkout() {
+  el.addWorkoutPage.close();
+  listofExercises = {};
+  el.workoutName.value = '';
+  el.nOfExercises.textContent = 0;
+  el.totalTime.textContent = 0;
+  el.exercises.replaceChildren();
+}
+
+function loadElements() {
+  el.error = document.querySelector('#error');
+  el.workoutName = document.querySelector('#workoutName');
+  el.addWorkout = document.querySelector('#addWorkout');
   el.addExercise = document.querySelector('#addExercise');
-  const cancel = document.querySelector('#cancelWorkout');
   el.addRest = document.querySelector('#addRest');
-  const saveWorkout = document.querySelector('#saveWorkout');
-
-  cancel.addEventListener('click', removeWorkoutInput);
-  cancel.addEventListener('click', buttonSoundEffect);
-  el.addExercise.addEventListener('click', loadExerciseInputs);
-  el.addExercise.addEventListener('click', buttonSoundEffect);
-  el.addRest.addEventListener('click', loadRestInput);
-  el.addRest.addEventListener('click', buttonSoundEffect);
-  saveWorkout.addEventListener('click', addWorkoutToServer);
-  saveWorkout.addEventListener('click', buttonSoundEffect);
+  el.saveWorkout = document.querySelector('#saveWorkout');
+  el.cancelWorkout = document.querySelector('#cancelWorkout');
+  el.totalTime = document.querySelector('#totalTime');
+  el.workouts = document.querySelector('#workouts');
+  el.exercises = document.querySelector('#exercises');
+  el.addWorkoutPage = document.querySelector('#workoutPage');
+  el.nOfExercises = document.querySelector('#numberOfexercises');
+  el.workoutDiff = document.querySelector('#level');
+  el.workoutList = document.querySelector('#workouts');
 }
 
-function prepareHadlers() {
-  el.addWorkoutBtn = document.querySelector('#addWorkout');
-  el.workoutPage = document.querySelector('#workoutPage');
-  el.workoutList = document.querySelector('#workouts');
-  el.error = document.querySelector('footer');
+function addListeners() {
+  el.addWorkout.addEventListener('click', addWorkout);
+  el.addExercise.addEventListener('click', addExercise);
+  el.addRest.addEventListener('click', addRest);
+  el.saveWorkout.addEventListener('click', saveWorkout);
+  el.cancelWorkout.addEventListener('click', cancelWorkout);
 }
 
 function home() {
-  prepareHadlers();
+  loadElements();
+  addListeners();
   loadWorkouts();
-  addWorkoutToDashboard();
 }
-
-function addWorkoutToDashboard() {
-  el.addWorkoutBtn.addEventListener('click', loadWorkoutTemplate);
-  el.addWorkoutBtn.addEventListener('click', buttonSoundEffect);
-}
-
 home();

@@ -30,30 +30,26 @@ export async function deleteWorkout(id) {
   return db.run('DELETE FROM Workout WHERE id = ?', id);
 }
 
-export async function addWorkout(name,desc,duration,exercises) {
-  if (name.trim() === '' && exercises == []) return listWorkout();
+export async function addWorkout(name, diff, duration, exercises) {
+  if (name.trim() === '' && exercises.length === 0) return listWorkout();
   const db = await dbConn;
   const id = uuid();
   const n = name;
   const d = parseInt(duration);
-  const listofExercises = `{"exercises": [${exercises.toString()}]}`;
-  await db.run('INSERT INTO Workout VALUES (?, ?, ? , ?, ?)', [id, n,desc ,d, listofExercises]);
-
+  const listOfExercises = exercises;
+  await db.run('INSERT INTO Workout VALUES (?, ?, ?, ?, ?)', [id, n, diff, d, listOfExercises]);
   return listWorkout();
 }
 
 export async function editWorkout(id, updatedWorkout) {
   const db = await dbConn;
-
   const name = updatedWorkout.name;
   const duration = updatedWorkout.duration;
-  const desc = updatedWorkout.description;
+  const diff = updatedWorkout.difficulty;
   const exercises = updatedWorkout.exercises;
+  const listOfExercises = exercises;
+  const statement = await db.run('UPDATE Workout SET name = ?, difficulty = ?, duration = ?, exercises = ? WHERE id = ?', [name, diff, duration, listOfExercises, id]);
 
-  const statement = await db.run('UPDATE Workout SET name = ?, description = ? , duration = ?, exercises = ? WHERE id = ?', [name,desc,duration , exercises, id]);
-
-  // if nothing was updated, the ID doesn't exist
   if (statement.changes === 0) throw new Error('Workout not found');
-
   return findWorkout(id);
 }

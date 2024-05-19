@@ -1,6 +1,6 @@
-CREATE TABLE Workout (
+CREATE TABLE Workout(
     id CHAR(36) PRIMARY KEY,
-    name VARCHAR(30)     NOT NULL,
+    name VARCHAR(20) NOT NULL,
     difficulty TEXT NOT NULL,
     duration INT NOT NULL,
     exercises TEXT NOT NULL 

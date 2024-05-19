@@ -2,14 +2,32 @@ const el = {};
 
 let interval;
 
-function soundEffect(type) {
-  let audio;
-  if (type === 'button') {
-    audio = new Audio('../audio/click_noise.mp3');
-  } else if (type === 'beep') {
-    audio = new Audio('../audio/short-beep-countdown.mp3');
+function selectPauseOrContinue(element) {
+  if (element === 'pause') {
+    const pauseSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    pauseSVG.setAttribute('width', '1em');
+    pauseSVG.setAttribute('height', '1em');
+    pauseSVG.setAttribute('viewBox', '0 0 24 24');
+    pauseSVG.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+    const newPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    newPath.setAttribute('fill', 'currentColor');
+    newPath.setAttribute('d', 'M14 19V5h4v14zm-8 0V5h4v14z');
+    pauseSVG.appendChild(newPath);
+    return pauseSVG;
+  } else {
+    const continueSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    continueSvg.setAttribute('width', '1em');
+    continueSvg.setAttribute('height', '1em');
+    continueSvg.setAttribute('viewBox', '0 0 32 32');
+    continueSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+    const newPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    newPath.setAttribute('fill', 'currentColor');
+    newPath.setAttribute('d', 'M10 28a1 1 0 0 1-1-1V5a1 1 0 0 1 1.501-.865l19 11a1 1 0 0 1 0 1.73l-19 11A1 1 0 0 1 10 28M4 4h2v24H4z');
+    continueSvg.appendChild(newPath);
+    return continueSvg;
   }
-  audio.play();
 }
 
 function changeExercise(current, next) {
@@ -18,46 +36,51 @@ function changeExercise(current, next) {
 }
 
 function changeTimer() {
-  if (parseInt(el.duration.textContent) <= 0 && el.currentIndex < el.exerciseList.length - 1) {
+  if (parseInt(el.duration.textContent) <= 0 && el.currentIndex < el.exercisesIndex.length - 1) {
     el.currentIndex += 1;
-    el.duration.textContent = el.exerciseList[el.currentIndex].time;
-    el.timeLeft.textContent = parseInt(el.timeLeft.textContent) - parseInt(el.exerciseList[el.currentIndex - 1].time);
+    el.duration.textContent = el.exerciseList[el.exercisesIndex[el.currentIndex]].time;
   } else if (parseInt(el.duration.textContent) > 0) {
     el.duration.textContent = parseInt(el.duration.textContent) - 1;
+    el.timeLeft.textContent = parseInt(el.timeLeft.textContent) - 1;
   }
 
-  if (el.currentIndex + 1 < el.exerciseList.length) {
-    changeExercise(el.exerciseList[el.currentIndex].name, el.exerciseList[el.currentIndex + 1].name);
-  } else if (el.currentIndex + 1 == el.exerciseList.length) {
-    changeExercise(el.exerciseList[el.currentIndex].name, 'no more exercises left');
+  if (el.currentIndex + 1 < el.exercisesIndex.length) {
+    changeExercise(el.exerciseList[el.exercisesIndex[el.currentIndex]].name, el.exerciseList[el.exercisesIndex[el.currentIndex + 1]].name);
+  } else if (el.currentIndex + 1 === el.exercisesIndex.length) {
+    changeExercise(el.exerciseList[el.exercisesIndex[el.currentIndex]].name, 'no more exercises left');
   }
 
-  if (el.currentIndex == el.exerciseList.length - 1 && el.duration.textContent == 0) {
+  if (el.currentIndex === el.exercisesIndex.length - 1 && parseInt(el.duration.textContent) === 0) {
     el.currentIndex += 1;
     el.timeLeft.textContent = 0;
-    stopWorkout();
+    stopAlert("Well Done! You've completed the workout!");
   }
 
-  if (el.duration.textContent == 3) {
-    const main = document.querySelector('main');
-    soundEffect('beep');
+  const main = document.querySelector('main');
+  if (el.duration.textContent <= 3) {
     main.classList.add('highlight');
-    setTimeout(() => {
-      main.classList.remove('highlight');
-    }, 3000);
+  } else {
+    main.classList.remove('highlight');
   }
 }
 
 function startWorkout() {
   el.currentIndex = 0;
   el.timeLeft.textContent = el.totalTime;
-  el.duration.textContent = el.exerciseList[el.currentIndex].time;
-  if (el.currentIndex + 1 < el.exerciseList.length) {
-    changeExercise(el.exerciseList[el.currentIndex].name, el.exerciseList[el.currentIndex + 1].name);
-  } else if (el.currentIndex + 1 === el.exerciseList.length) {
-    changeExercise(el.exerciseList[el.currentIndex].name, 'no more exercises left');
+  el.duration.textContent = el.exerciseList[el.exercisesIndex[el.currentIndex]].time;
+  if (el.currentIndex + 1 < el.exercisesIndex.length) {
+    changeExercise(el.exerciseList[el.exercisesIndex[el.currentIndex]].name, el.exerciseList[el.exercisesIndex[el.currentIndex + 1]].name);
+  } else if (el.currentIndex + 1 === el.exercisesIndex.length) {
+    changeExercise(el.exerciseList[el.exercisesIndex[el.currentIndex]].name, 'no more exercises left');
   }
   interval = setInterval(changeTimer, 1000);
+}
+
+function stopAlert(message) {
+  el.stopMessage.showModal();
+  const stopMessage = document.querySelector('#congratulations');
+  stopMessage.textContent = message;
+  setTimeout(stopWorkout, 2000);
 }
 
 function stopWorkout() {
@@ -66,36 +89,45 @@ function stopWorkout() {
 }
 
 function continueAndPauseWorkout() {
+  const svg = el.pauseOrContinue.querySelector('svg');
   if (el.pauseOrContinue.id === 'pause') {
     clearInterval(interval);
     el.pauseOrContinue.id = 'continue';
+    el.pauseOrContinueTxt.textContent = 'continue';
+    el.pauseOrContinue.replaceChild(selectPauseOrContinue('continue'), svg);
   } else if (el.pauseOrContinue.id === 'continue') {
     interval = setInterval(changeTimer, 1000);
     el.pauseOrContinue.id = 'pause';
+    el.pauseOrContinueTxt.textContent = 'pause';
+    el.pauseOrContinue.replaceChild(selectPauseOrContinue('pause'),
+      svg);
   }
 }
 
 function getData() {
-  const workoutExercises = JSON.parse(sessionStorage.getItem('exercises'));
+  const workoutExercises = sessionStorage.getItem('exercises');
   el.totalTime = sessionStorage.getItem('totalTime');
-  el.exerciseList = workoutExercises.exercises;
+  el.exerciseList = JSON.parse(workoutExercises);
+  el.exercisesIndex = Object.keys(el.exerciseList);
+  console.log(el.exercisesIndex.length);
+  console.log(el.exerciseList);
 }
 
+
 function addButtonFunctionality() {
-  el.stop.addEventListener('click', stopWorkout);
+  el.stop.addEventListener('click', () => { stopAlert('Better Luck Next Time!'); });
   el.pauseOrContinue.addEventListener('click', continueAndPauseWorkout);
-  el.stop.addEventListener('click', () => { soundEffect('button'); });
-  el.pauseOrContinue.addEventListener('click', () => { soundEffect('button'); });
 }
 
 function prepareHadlers() {
+  el.pauseOrContinueTxt = document.querySelector('span');
   el.timeLeft = document.querySelector('h2');
-  el.exercise = document.querySelectorAll('p')[1];
-  el.duration = document.querySelectorAll('p')[2];
-  el.nextExercise = document.querySelectorAll('p')[4];
-  console.log(document.querySelectorAll('p'));
+  el.exercise = document.querySelector('#current');
+  el.duration = document.querySelector('#duration');
+  el.nextExercise = document.querySelector('#next');
   el.stop = document.querySelectorAll('button')[0];
   el.pauseOrContinue = document.querySelectorAll('button')[1];
+  el.stopMessage = document.querySelector('dialog');
 }
 
 function initialise() {

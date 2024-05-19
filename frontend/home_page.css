@@ -1,151 +1,39 @@
-* {
-    text-align: center;
-    /* margin-left: auto;
-    margin-right: auto; */
-}
 
-ul {
-    list-style-type: none;
-    margin: 10;
-    padding: 0;
-}
-
-li {
-    margin-bottom: 1em;
-}
-
-.highlight {
-    background-color: #4CAF50;
-    color: white;
-    transition: background-color 0.5s ease-in-out;
-}
-
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f8f8;
-    color: #333;
-    margin: 0;
-    padding: 20px;
-}
-
-header {
-    text-align: center;
-    background-color: #007bff;
-    color: white;
-    padding: 20px 0;
-    margin-bottom: 20px;
-}
-
-#workouts {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(1em, 1fr));
-    gap: 10px;
-    padding: 0;
-}
-
-
-input {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-#send,
-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-button:disabled {
-    background-color: #cccccc;
-    /* Gray background to show inactivity */
-    color: #666666;
-    /* Dark gray text to reduce contrast */
-    cursor: not-allowed;
-    /* Cursor indicates the button is not clickable */
-    opacity: 0.5;
-    /* Slightly transparent to show inactivity */
-}
-
-
-/* .button:hover {
-    background-color: #0056b3;
-} */
-
-footer {
-    text-align: center;
-    padding: 10px 0;
-    margin-top: 20px;
-    background-color: #f1f1f1;
-}
-
-
-main {
-    margin: auto;
-    display: block;
-    width: 90%;
-    /* Slightly smaller width for mobile for better readability */
-    max-width: 960px;
-    /* Limiting max width for larger screens */
-}
-
-ul#workouts {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: block;
-    /* Default to block for mobile */
-}
-
-ul#workouts li {
-    background: white;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* #send, .button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: block; 
-    width: 100%;
-    margin-top: 10px;
-} */
-
-<<<<<<< HEAD
-/* Media query for desktops and larger screens */
-@media (min-width: 600px) {
-    ul#workouts {
-=======
 * {
     text-align: center;
     font-family: sans-serif;
 }
 
-body {
-    --background-colour: #255f85;
-    background:linear-gradient(90deg,var(--background-colour),#acf7c1);
+#weight {
+    font-size: 10em;
+    color: grey;
 }
 
 
-ul,li {
+
+#overview,
+#workoutPage {
+    padding: 1em;
+}
+
+#exercises {
+    overflow-y: scroll;
+    max-height: 30rem;
+}
+
+
+
+body {
+    --background-colour: #255f85;
+    background: linear-gradient(90deg, var(--background-colour), #acf7c1);
+}
+
+
+ul,
+li {
     list-style: none;
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
 }
 
 li {
@@ -160,7 +48,7 @@ h1 {
     background-color: var(--background-colour);
     color: white;
     border-radius: 2rem;
-} 
+}
 
 #error {
     display: none;
@@ -168,10 +56,10 @@ h1 {
     top: 1em;
 }
 
-#send,button {
+#send,
+button {
     border-radius: 0.5rem;
     font-size: 1rem;
-    /* display: inline-flex; */
     height: 4rem;
     padding: 0;
     color: white;
@@ -184,21 +72,23 @@ h1 {
     font-weight: 500;
 }
 
-#send:hover,button:hover {
+#send:hover,
+button:hover {
     background-color: #001C3144;
-    /* box-shadow: 0em 0em 0.1rem 0.1rem rgb(0,0,0); */
 }
 
-#send:active,button:active {
-    background-color: #ff1C3144;   
+#send:active,
+button:active {
+    background-color: #ff1C3144;
 }
 
-#send:disabled,button:disabled {
+#send:disabled,
+button:disabled {
     background-color: #b3cae0;
-    /* box-shadow: 0em 0em 0.1rem 0.1rem rgb(0,0,0); */
 }
 
-.button__text,.button__icon {
+.button__text,
+.button__icon {
     display: inline-flex;
     align-items: center;
     padding: 0 1.8rem;
@@ -207,23 +97,25 @@ h1 {
 
 ul {
     display: grid;
-    /* grid-auto-flow: column; */
-    grid-template-columns: repeat(4,1fr);
+
+    grid-template-columns: repeat(auto-fill, 20em);
+    justify-content: center;
 }
 
-@media (max-width: 40em) {
-    ul {
->>>>>>> parent of d414957 (Add better styling for the dialog box)
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 10px;
-    }
+dialog {
+    width: 100%;
+    height: 100%;
+}
 
-    #send,
-    button {
-        display: inline-block;
-        /* Allow buttons to flow in line in larger screens */
-        width: auto;
-        margin: 5px;
+.highlight {
+    background-color: darkblue;
+}
+
+@media (max-width: 38em) {
+    ul {
+        display: grid;
+
+        grid-template-columns: none;
+        grid-template-rows: 1fr;
     }
 }
