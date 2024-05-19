@@ -44,15 +44,13 @@ export class WorkoutCard extends HTMLElement {
 
     async getFullWorkout() {
         const workoutData = await this.getWorkoutData();
-        console.log(workoutData.exercises);
         const workout = JSON.parse(workoutData.exercises);
-        const fullWorkout = workout.exercises;
+        const fullWorkout = workout;
         return fullWorkout;
     }
 
     errorChecking() {
         const error = this.shadow.querySelector('#error');
-        console.log(error);
         error.textContent = '';
         const workoutName = this.shadow.querySelector('#workoutName').value.trim();
         const workoutDiff = this.shadow.querySelector('.level').value;
@@ -65,11 +63,11 @@ export class WorkoutCard extends HTMLElement {
             error.textContent += 'Workout difficulty cannot be empty. ';
         }
 
-        if (this.fullWorkout.filter((exercise) => exercise != 'null').length === 1) {
+        if (Object.keys(this.fullWorkout).length === 0) {
             error.textContent += 'Workout must have at least one exercise. ';
         }
 
-        if (workoutName !== '' && workoutDiff !== '' && this.fullWorkout.length > 0) {
+        if (workoutName !== '' && workoutDiff !== '' && Object.keys(this.fullWorkout).length > 0) {
             return true;
         } else {
             return false;
@@ -77,28 +75,49 @@ export class WorkoutCard extends HTMLElement {
     }
 
 
-    getExercises() {
+    createExercises() {
         const listofExercises = this.shadow.querySelector('ul');
-        for (let i = 0; i < this.fullWorkout.length; i++) {
+        for (const key in this.fullWorkout) {
             const exerc = document.createElement('exercise-info');
-            exerc.textContent = this.fullWorkout[i].name;
-            exerc.desc = this.fullWorkout[i].desc;
-            exerc.time = this.fullWorkout[i].time;
-            exerc.index = i;
-            exerc.editable = false;
-            // exerc.addEventListener("deleteExercise", this.deleteExercise.bind(this));
-            // exerc.addEventListener("editExercise", (e) => { this.editExercise(e, false); });
+            exerc.textContent = this.fullWorkout[key].name;
+            exerc.desc = this.fullWorkout[key].desc;
+            exerc.time = this.fullWorkout[key].time;
+            exerc.index = key;
+            exerc.editable = 'false';
+            exerc.addEventListener("deleteExercise", this.deleteExercise.bind(this));
+            exerc.addEventListener("editExercise", this.editExercise.bind(this));
             listofExercises.append(exerc);
         }
-        const onlyExercises = this.fullWorkout.filter((exercise) => exercise.name != 'Rest');
-        return onlyExercises;
+        return this.getNumberOfExercises();
     }
 
-    isOnlyExerciseLeft() {
-        const exercises = this.fullWorkout.filter((exercise) => exercise !== null && exercise.name.trim() !== 'Rest');
-        return exercises.length === 1;
+    editExercise(e) {
+        const totalTime = this.shadow.querySelector('#totalTime');
+        this.fullWorkout[e.target.index] = { name: e.target.textContent, desc: e.target.desc, time: e.target.time };
+        totalTime.textContent = parseInt(totalTime.textContent) - parseInt(e.detail.currentTime) + parseInt(e.target.time);
     }
 
+    deleteExercise(e) {
+        const totalTime = this.shadow.querySelector('#totalTime');
+        const numberOfExercises = this.shadow.querySelector('#numberOfexercises');
+        totalTime.textContent = parseInt(totalTime.textContent) - parseInt(e.target.time);
+        delete this.fullWorkout[e.target.index];
+        if (e.target.textContent !== "Rest") {
+            numberOfExercises.textContent = parseInt(numberOfExercises.textContent) - 1;
+        }
+        e.target.remove();
+    }
+
+    getNumberOfExercises() {
+        let Nofexercises = 0;
+        for (const key of Object.keys(this.fullWorkout)) {
+            if (this.fullWorkout[key].name !== "Rest") {
+                Nofexercises++;
+            }
+        }
+        return Nofexercises;
+
+    }
 
 
     async showEdit() {
@@ -113,8 +132,8 @@ export class WorkoutCard extends HTMLElement {
         const totalTime = this.shadow.querySelector('#totalTime');
         const numberOfExercises = this.shadow.querySelector('#numberOfexercises');
         const workoutData = await this.getWorkoutData();
-        const exercises = await this.getExercises();
-        numberOfExercises.textContent = exercises.length;
+        const exercises = await this.createExercises();
+        numberOfExercises.textContent = exercises;
         totalTime.textContent = workoutData.duration;
         workoutDiff.value = workoutData.difficulty;
         workoutName.value = this.textContent;
@@ -123,6 +142,46 @@ export class WorkoutCard extends HTMLElement {
         addExercise.addEventListener("click", this.addExercise.bind(this));
         addRest.addEventListener("click", this.addRest.bind(this));
         return this.shadow.querySelectorAll('exercise-info');
+    }
+
+    addtoListOrEdit(e) {
+        const totalTime = this.shadow.querySelector('#totalTime');
+        const numberOfExercises = this.shadow.querySelector('#numberOfexercises');
+        if (e.target.editable === 'create') {
+          const payload = { name: e.target.textContent, desc: e.target.desc, time: e.target.time };
+          this.fullWorkout[e.target.index] = payload;
+          if (e.target.textContent !== 'Rest') {
+            numberOfExercises.textContent = parseInt(numberOfExercises.textContent) + 1;
+          }
+          totalTime.textContent = parseInt(totalTime.textContent) + parseInt(e.target.time);
+          console.log(listofExercises);
+          e.target.editable = 'false';
+        } else {
+            this.editExercise(e) 
+        }
+    }
+
+    addRest() {
+        const listofExercises = this.shadow.querySelector('ul');
+        const exercise = document.createElement('exercise-info');
+        exercise.editable = 'create';
+        exercise.textContent = 'Rest';
+        exercise.desc = 'Rest';
+        exercise.index = crypto.randomUUID();
+        listofExercises.append(exercise);
+        exercise.addEventListener('deleteExercise', this.deleteExercise.bind(this));
+        exercise.addEventListener('editExercise', this.addtoListOrEdit.bind(this));
+    }
+      
+    addExercise() {
+        const listofExercises = this.shadow.querySelector('ul');
+        const exercise = document.createElement('exercise-info');
+        exercise.editable = 'create';
+        exercise.index = crypto.randomUUID();
+        listofExercises.append(exercise);
+        exercise.addEventListener('deleteExercise', deleteExercise);
+        exercise.addEventListener('deleteExercise', this.deleteExercise.bind(this));
+        exercise.addEventListener('editExercise', this.addtoListOrEdit.bind(this));
     }
 
 
@@ -135,7 +194,6 @@ export class WorkoutCard extends HTMLElement {
         initialTimer.textContent = "3";
         let interval = setInterval(() => {
             if (currentValue > 0) {
-                console.log(currentValue);
                 currentValue--;
                 initialTimer.textContent = currentValue;
             } else {
@@ -149,9 +207,7 @@ export class WorkoutCard extends HTMLElement {
         const starting = this.shadow.querySelector('#startWorkout');
         this.startInitialTimer()
         const values = await this.getWorkoutData();
-        console.log(values);
         const exercs = JSON.stringify(this.fullWorkout);
-        console.log(JSON.stringify(this.fullWorkout));
         sessionStorage.setItem('exercises', exercs);
         sessionStorage.setItem('totalTime', values.duration);
 
@@ -165,7 +221,7 @@ export class WorkoutCard extends HTMLElement {
 
     async cancel() {
         const cancel = this.shadow.querySelector('#showEdit');
-        console.log(cancel);
+        this.fullWorkout = await this.getFullWorkout();
         cancel.close();
         this.showReadonly();
     }
@@ -232,29 +288,25 @@ export class WorkoutCard extends HTMLElement {
     }
 
     async save() {
-        console.log("save");
 
-        if (!this.errorChecking()) {
-            return;
-        }
-
-        const method = 'PUT';
-        const headers = { 'Content-Type': 'application/json' };
-        const name = this.shadow.querySelector('#workoutName').value;
-        const difficulty = this.shadow.querySelector('.level').value;
-        const duration = this.shadow.querySelector('#totalTime').textContent;
-        const exercises = this.fullWorkout.filter((exercise) => exercise != null);
-        const body = JSON.stringify({ name, difficulty, duration, exercises });
-        const options = { method, headers, body };
-        const response = await fetch(this.url, options);
-        if (response.ok) {
-            this.textContent = name;
-            this.diff = difficulty;
-            this.duration = duration;
-            this.fullWorkout = exercises;
-            this.showReadonly();
-        } else {
-            console.error('Failed to save exercise');
+        if (this.errorChecking()) {
+            const method = 'PUT';
+            const headers = { 'Content-Type': 'application/json' };
+            const name = this.shadow.querySelector('#workoutName').value;
+            const difficulty = this.shadow.querySelector('.level').value;
+            const duration = this.shadow.querySelector('#totalTime').textContent;
+            const exercises = JSON.stringify(this.fullWorkout);
+            const body = JSON.stringify({ name, difficulty, duration, exercises });
+            const options = { method, headers, body };
+            const response = await fetch(this.url, options);
+            if (response.ok) {
+                this.textContent = name;
+                this.diff = difficulty;
+                this.duration = duration;
+                this.showReadonly();
+            } else {
+                console.error('Failed to save exercise');
+            }
         }
     }
 

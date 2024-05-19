@@ -36,7 +36,7 @@ export async function addWorkout(name, diff, duration, exercises) {
   const id = uuid();
   const n = name;
   const d = parseInt(duration);
-  const listOfExercises = JSON.stringify({ exercises });
+  const listOfExercises = exercises;
   await db.run('INSERT INTO Workout VALUES (?, ?, ?, ?, ?)', [id, n, diff, d, listOfExercises]);
   return listWorkout();
 }
@@ -47,7 +47,7 @@ export async function editWorkout(id, updatedWorkout) {
   const duration = updatedWorkout.duration;
   const diff = updatedWorkout.difficulty;
   const exercises = updatedWorkout.exercises;
-  const listOfExercises = JSON.stringify({ exercises });
+  const listOfExercises = exercises;
   const statement = await db.run('UPDATE Workout SET name = ?, difficulty = ?, duration = ?, exercises = ? WHERE id = ?', [name, diff, duration, listOfExercises, id]);
 
   if (statement.changes === 0) throw new Error('Workout not found');

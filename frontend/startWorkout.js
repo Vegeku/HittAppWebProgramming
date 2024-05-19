@@ -4,20 +4,29 @@ let interval;
 
 function selectPauseOrContinue(element) {
   if (element === 'pause') {
-    const pauseSVG = el.pauseOrContinue.querySelector('svg');
-    const pauseSVGClone = pauseSVG.cloneNode(true);
-    return pauseSVGClone;
+    const pauseSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    pauseSVG.setAttribute('width', '1em');
+    pauseSVG.setAttribute('height', '1em');
+    pauseSVG.setAttribute('viewBox', '0 0 24 24');
+    pauseSVG.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+    const newPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    newPath.setAttribute('fill', 'currentColor');
+    newPath.setAttribute('d', 'M14 19V5h4v14zm-8 0V5h4v14z');
+    pauseSVG.appendChild(newPath);
+    return pauseSVG;
   } else {
     const continueSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     continueSvg.setAttribute('width', '1em');
     continueSvg.setAttribute('height', '1em');
-    continueSvg.setAttribute('viewBox', '0 0 24 24');
+    continueSvg.setAttribute('viewBox', '0 0 32 32');
     continueSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
     const newPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     newPath.setAttribute('fill', 'currentColor');
-    newPath.setAttribute('d', 'M6 6h12v12H6z');
+    newPath.setAttribute('d', 'M10 28a1 1 0 0 1-1-1V5a1 1 0 0 1 1.501-.865l19 11a1 1 0 0 1 0 1.73l-19 11A1 1 0 0 1 10 28M4 4h2v24H4z');
     continueSvg.appendChild(newPath);
+    return continueSvg;
   }
 }
 
@@ -27,21 +36,21 @@ function changeExercise(current, next) {
 }
 
 function changeTimer() {
-  if (parseInt(el.duration.textContent) <= 0 && el.currentIndex < el.exerciseList.length - 1) {
+  if (parseInt(el.duration.textContent) <= 0 && el.currentIndex < el.exercisesIndex.length - 1) {
     el.currentIndex += 1;
-    el.duration.textContent = el.exerciseList[el.currentIndex].time;
+    el.duration.textContent = el.exerciseList[el.exercisesIndex[el.currentIndex]].time;
   } else if (parseInt(el.duration.textContent) > 0) {
     el.duration.textContent = parseInt(el.duration.textContent) - 1;
     el.timeLeft.textContent = parseInt(el.timeLeft.textContent) - 1;
   }
 
-  if (el.currentIndex + 1 < el.exerciseList.length) {
-    changeExercise(el.exerciseList[el.currentIndex].name, el.exerciseList[el.currentIndex + 1].name);
-  } else if (el.currentIndex + 1 == el.exerciseList.length) {
-    changeExercise(el.exerciseList[el.currentIndex].name, 'no more exercises left');
+  if (el.currentIndex + 1 < el.exercisesIndex.length) {
+    changeExercise(el.exerciseList[el.exercisesIndex[el.currentIndex]].name, el.exerciseList[el.exercisesIndex[el.currentIndex + 1]].name);
+  } else if (el.currentIndex + 1 === el.exercisesIndex.length) {
+    changeExercise(el.exerciseList[el.exercisesIndex[el.currentIndex]].name, 'no more exercises left');
   }
 
-  if (el.currentIndex == el.exerciseList.length - 1 && el.duration.textContent == 0) {
+  if (el.currentIndex === el.exercisesIndex.length - 1 && parseInt(el.duration.textContent) === 0) {
     el.currentIndex += 1;
     el.timeLeft.textContent = 0;
     stopAlert("Well Done! You've completed the workout!");
@@ -58,11 +67,11 @@ function changeTimer() {
 function startWorkout() {
   el.currentIndex = 0;
   el.timeLeft.textContent = el.totalTime;
-  el.duration.textContent = el.exerciseList[el.currentIndex].time;
-  if (el.currentIndex + 1 < el.exerciseList.length) {
-    changeExercise(el.exerciseList[el.currentIndex].name, el.exerciseList[el.currentIndex + 1].name);
-  } else if (el.currentIndex + 1 === el.exerciseList.length) {
-    changeExercise(el.exerciseList[el.currentIndex].name, 'no more exercises left');
+  el.duration.textContent = el.exerciseList[el.exercisesIndex[el.currentIndex]].time;
+  if (el.currentIndex + 1 < el.exercisesIndex.length) {
+    changeExercise(el.exerciseList[el.exercisesIndex[el.currentIndex]].name, el.exerciseList[el.exercisesIndex[el.currentIndex + 1]].name);
+  } else if (el.currentIndex + 1 === el.exercisesIndex.length) {
+    changeExercise(el.exerciseList[el.exercisesIndex[el.currentIndex]].name, 'no more exercises left');
   }
   interval = setInterval(changeTimer, 1000);
 }
@@ -80,15 +89,18 @@ function stopWorkout() {
 }
 
 function continueAndPauseWorkout() {
+  const svg = el.pauseOrContinue.querySelector('svg');
   if (el.pauseOrContinue.id === 'pause') {
     clearInterval(interval);
     el.pauseOrContinue.id = 'continue';
-    el.pauseOrContinue.replaceChild(selectPauseOrContinue('continue'), el.pauseOrContinue.firstChild);
+    el.pauseOrContinueTxt.textContent = 'continue';
+    el.pauseOrContinue.replaceChild(selectPauseOrContinue('continue'), svg);
   } else if (el.pauseOrContinue.id === 'continue') {
     interval = setInterval(changeTimer, 1000);
     el.pauseOrContinue.id = 'pause';
+    el.pauseOrContinueTxt.textContent = 'pause';
     el.pauseOrContinue.replaceChild(selectPauseOrContinue('pause'),
-      el.pauseOrContinue.firstChild);
+      svg);
   }
 }
 
@@ -96,6 +108,8 @@ function getData() {
   const workoutExercises = sessionStorage.getItem('exercises');
   el.totalTime = sessionStorage.getItem('totalTime');
   el.exerciseList = JSON.parse(workoutExercises);
+  el.exercisesIndex = Object.keys(el.exerciseList);
+  console.log(el.exercisesIndex.length);
   console.log(el.exerciseList);
 }
 
@@ -106,6 +120,7 @@ function addButtonFunctionality() {
 }
 
 function prepareHadlers() {
+  el.pauseOrContinueTxt = document.querySelector('span');
   el.timeLeft = document.querySelector('h2');
   el.exercise = document.querySelector('#current');
   el.duration = document.querySelector('#duration');

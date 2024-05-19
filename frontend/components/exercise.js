@@ -40,16 +40,24 @@ export class Exercise extends HTMLElement {
     const readonly = this.shadow.querySelector('#showExecise');
     const clone = readonly.content.cloneNode(true);
     this.shadow.append(clone);
-    // const delButton = this.shadow.querySelectorAll('button')[0];
-    // const editButton = this.shadow.querySelectorAll('button')[1];
+    const delButton = this.shadow.querySelectorAll('button')[0];
+    const editButton = this.shadow.querySelectorAll('button')[1];
     const name = this.shadow.querySelectorAll('p')[0];
     const description = this.shadow.querySelectorAll('p')[1];
     const time = this.shadow.querySelectorAll('p')[2];
     name.textContent = this.textContent;
     description.textContent = this.desc;
     time.textContent = this.time;
-    // delButton.addEventListener('click', this.deleteExercise.bind(this));
-    // editButton.addEventListener('click', this.editExercise.bind(this));
+    delButton.addEventListener('click', this.deleteExercise.bind(this));
+    editButton.addEventListener('click', this.editExercise.bind(this));
+  }
+
+  deleteExercise() {
+    const deleteEvent = new CustomEvent('deleteExercise', {
+      bubbles: true,
+      detail: { index: this.index, time: this.time },
+    });
+    this.dispatchEvent(deleteEvent);
   }
 
   /**
@@ -107,7 +115,8 @@ export class Exercise extends HTMLElement {
     save.value = 'Save';
     const cancel = this.shadow.querySelector('#cancelExercise');
     save.addEventListener('click', this.saveExerciseEdit.bind(this));
-    cancel.addEventListener('click', this.cancelElement.bind(this));
+    cancel.addEventListener('click', this.cancel.bind(this));
+    // if create do something, if edit do something (add event listener to depend on the value of editable attribute)
   }
 
   /**
@@ -128,6 +137,14 @@ export class Exercise extends HTMLElement {
         detail: { index: this.index, currentTime: oldTime, time: this.time, desc: this.desc },
       });
       this.dispatchEvent(editEvent);
+      this.showExercise();
+    }
+  }
+
+  cancel() {
+    if (this.editable === 'create') {
+      this.remove();
+    } else if (this.errorChecking()) {
       this.showExercise();
     }
   }

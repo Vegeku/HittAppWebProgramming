@@ -1,9 +1,7 @@
-'use strict';
-
-
 const el = {};
 
-const listofExercises = { exercises: [] };
+let listofExercises = {};
+let listOfExIds;
 
 async function loadWorkouts() {
   const response = await fetch('workouts');
@@ -40,18 +38,19 @@ function showWorkouts(workouts, where) {
 function errorChecking() {
   el.error.textContent = '';
   const nameOfWorkout = el.workoutName.value.trim();
-  if (listofExercises.exercises.length !== 0 && nameOfWorkout !== '' && listofExercises.exercises[0].name !== 'Rest' && nameOfWorkout.length <= 20) {
+  listOfExIds = Object.keys(listofExercises);
+  if (listOfExIds.length !== 0 && nameOfWorkout !== '' && listofExercises[listOfExIds[0]].name !== 'Rest' && nameOfWorkout.length <= 20) {
     el.error.style.display = 'none';
     return true;
   } else {
     el.error.style.display = 'block';
-    if (listofExercises.exercises.length === 0) {
+    if (listOfExIds.length === 0) {
       el.error.textContent += 'Please add exercises to the workout. ';
     }
     if (nameOfWorkout === '') {
       el.error.textContent += 'Please add a name to the workout. ';
     }
-    if (listofExercises.exercises[0].name === 'Rest') {
+    if (listofExercises[listOfExIds[0]].name === 'Rest') {
       el.error.textContent += 'First exercise cannot be a rest. ';
     }
     if (nameOfWorkout.length > 20) {
@@ -61,17 +60,12 @@ function errorChecking() {
 }
 
 async function saveWorkout() {
-  listofExercises.exercises = listofExercises.exercises.filter((exercise) => exercise != null);
-  const exercisesList = document.querySelectorAll('exercise-info');
-  for (let i = 0; i < listofExercises.exercises.length; i++) {
-    exercisesList[i].index = i;
-  }
   if (errorChecking()) {
     const payload = {
       name: el.workoutName.value.trim(),
       difficulty: el.workoutDiff.value.trim(),
       duration: parseInt(el.totalTime.textContent),
-      exercises: listofExercises.exercises,
+      exercises: JSON.stringify(listofExercises),
     };
     const response = await fetch('/workout', {
       method: 'POST',
@@ -81,7 +75,7 @@ async function saveWorkout() {
 
     if (response.ok) {
       cancelWorkout();
-      listofExercises.exercises = [];
+      listofExercises = {};
       const workoutsList = await response.json();
       el.workoutList.replaceChildren();
       showWorkouts(workoutsList, el.workoutList);
@@ -89,21 +83,21 @@ async function saveWorkout() {
   }
 }
 
-function deleteExercise(e) {
-  e.target.remove();
-  el.totalTime.textContent = parseInt(el.totalTime.textContent) - parseInt(listofExercises.exercises[e.detail.index].time);
-  listofExercises.exercises[e.detail.index] = null;
-  el.nOfExercises.textContent = parseInt(el.nOfExercises.textContent) - 1;
-}
 
-
-function addtoList(e) {
-  console.log('add to list');
-  const payload = { name: e.target.textContent, desc: e.target.desc, time: e.target.time };
-  listofExercises.exercises.push(payload);
-  el.nOfExercises.textContent = parseInt(el.nOfExercises.textContent) + 1;
-  el.totalTime.textContent = parseInt(el.totalTime.textContent) + parseInt(e.target.time);
-  console.log(listofExercises.exercises);
+function addtoListOrEdit(e) {
+  if (e.target.editable === 'create') {
+    const payload = { name: e.target.textContent, desc: e.target.desc, time: e.target.time };
+    listofExercises[e.target.index] = payload;
+    if (e.target.textContent !== 'Rest') {
+      el.nOfExercises.textContent = parseInt(el.nOfExercises.textContent) + 1;
+    }
+    el.totalTime.textContent = parseInt(el.totalTime.textContent) + parseInt(e.target.time);
+    console.log(listofExercises);
+    e.target.editable = 'false';
+  } else {
+    listofExercises[e.target.index] = { name: e.target.textContent, desc: e.target.desc, time: e.target.time };
+    el.totalTime.textContent = parseInt(el.totalTime.textContent) - parseInt(e.detail.currentTime) + parseInt(e.target.time);
+  }
 }
 
 function addRest() {
@@ -111,19 +105,28 @@ function addRest() {
   exercise.editable = 'create';
   exercise.textContent = 'Rest';
   exercise.desc = 'Rest';
-  exercise.index = listofExercises.exercises.length;
+  exercise.index = crypto.randomUUID();
   el.exercises.append(exercise);
   exercise.addEventListener('deleteExercise', deleteExercise);
-  exercise.addEventListener('editExercise', addtoList);
+  exercise.addEventListener('editExercise', addtoListOrEdit);
 }
 
 function addExercise() {
   const exercise = document.createElement('exercise-info');
   exercise.editable = 'create';
-  exercise.index = listofExercises.exercises.length;
+  exercise.index = crypto.randomUUID();
   el.exercises.append(exercise);
   exercise.addEventListener('deleteExercise', deleteExercise);
-  exercise.addEventListener('editExercise', addtoList);
+  exercise.addEventListener('editExercise', addtoListOrEdit);
+}
+
+function deleteExercise(e) {
+  el.totalTime.textContent = parseInt(el.totalTime.textContent) - parseInt(e.target.time);
+  delete listofExercises[e.target.index];
+  if (e.target.textContent !== 'Rest') {
+    el.nOfExercises.textContent = parseInt(el.nOfExercises.textContent) - 1;
+  }
+  e.target.remove();
 }
 
 function addWorkout() {
@@ -132,7 +135,7 @@ function addWorkout() {
 
 function cancelWorkout() {
   el.addWorkoutPage.close();
-  listofExercises.exercises = [];
+  listofExercises = {};
   el.workoutName.value = '';
   el.nOfExercises.textContent = 0;
   el.totalTime.textContent = 0;
