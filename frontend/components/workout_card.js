@@ -73,6 +73,7 @@ export class WorkoutCard extends HTMLElement {
         if (workoutName !== '' && workoutDiff !== '' && Object.keys(this.fullWorkout).length > 0) {
             return true;
         } else {
+            error.style.display = 'block';
             return false;
         }
     }
@@ -287,7 +288,10 @@ export class WorkoutCard extends HTMLElement {
         const name = this.shadow.querySelector('h4').textContent;
         const body = JSON.stringify({ name });
         const options = { method, headers, body };
-        await fetch(this.url, options);
+        const response = await fetch(this.url, options);
+        if (response.ok) {
+            location.reload();
+        }
     }
 
     async save() {

@@ -1,13 +1,21 @@
 
+
 * {
     text-align: center;
     font-family: sans-serif;
-    /* color: white; */
+}
+
+#info {
+    display: none;
 }
 
 #weight {
     font-size: 10em;
     color:white ;
+}
+
+#duration {
+    font-size: 5rem;
 }
 
 #overview,
@@ -123,6 +131,7 @@ dialog {
 
 #workout>button {
     width: 16rem;
+    margin: 0.5rem;
 }
 
 .highlight {
@@ -137,4 +146,4 @@ dialog {
         grid-template-columns: none;
         grid-template-rows: 1fr;
     }
-}
+} 

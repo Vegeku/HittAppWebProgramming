@@ -94,8 +94,10 @@ export class Exercise extends HTMLElement {
     }
 
     if (newDesc.value.trim() !== '' && newName.value.trim() !== '' && newTime.time !== '0') {
+      // error.style.display = 'none';
       return true;
     } else {
+      error.style.display = 'block';
       return false;
     }
   }
