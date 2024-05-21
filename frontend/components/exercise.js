@@ -12,8 +12,11 @@ export class Exercise extends HTMLElement {
   async connectedCallback() {
     this.shadow = this.attachShadow({ mode: 'open' });
     const templateURL = import.meta.url.replace('.js', '.html');
+    const styleURL = import.meta.url.replace('.js', '.css');
     this.templatePage = await fetch(templateURL);
-    this.shadow.innerHTML = await this.templatePage.text();
+    this.itemStyle = await fetch(styleURL);
+    this.shadow.innerHTML = (await this.templatePage.text());
+    this.shadow.innerHTML += `<style> ${await this.itemStyle.text()}  </style>`;
 
     if (this.editable === 'true' || this.editable === 'create') {
       this.editExercise();
