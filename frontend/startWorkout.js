@@ -95,12 +95,16 @@ function continueAndPauseWorkout() {
     el.pauseOrContinue.id = 'continue';
     el.pauseOrContinueTxt.textContent = 'continue';
     el.pauseOrContinue.replaceChild(selectPauseOrContinue('continue'), svg);
+    el.pauseGif.style.display = 'inline';
+    el.workoutOverview.style.display = 'none';
   } else if (el.pauseOrContinue.id === 'continue') {
     interval = setInterval(changeTimer, 1000);
     el.pauseOrContinue.id = 'pause';
     el.pauseOrContinueTxt.textContent = 'pause';
     el.pauseOrContinue.replaceChild(selectPauseOrContinue('pause'),
       svg);
+    el.pauseGif.style.display = 'none';
+    el.workoutOverview.style.display = 'inline';
   }
 }
 
@@ -128,6 +132,8 @@ function prepareHadlers() {
   el.stop = document.querySelectorAll('button')[0];
   el.pauseOrContinue = document.querySelectorAll('button')[1];
   el.stopMessage = document.querySelector('dialog');
+  el.workoutOverview = document.querySelector('#workout-view');
+  el.pauseGif = document.querySelector('#pause-gif');
 }
 
 function initialise() {
