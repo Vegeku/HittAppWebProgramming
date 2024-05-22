@@ -18,6 +18,13 @@
     font-size: 5rem;
 }
 
+#pause-gif {
+    display: none;
+    align-content: center;
+    width: auto;
+    height: auto;
+}
+
 #overview,
 #workoutPage {
     padding: 1em;
@@ -145,5 +152,9 @@ dialog {
 
         grid-template-columns: none;
         grid-template-rows: 1fr;
+    }
+
+    #pause-gif {
+        width: 25rem;
     }
 } 
