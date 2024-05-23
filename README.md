@@ -314,3 +314,5 @@ if (storedExercises) {
 - **Browser Compatibility**: `sessionStorage` is widely supported in modern browsers, but always consider your target audience and their potential browser usage. For critical features, ensure to have a fallback mechanism.
 
 Using `sessionStorage` is a simple and effective way to pass data between different parts of your JavaScript application during a single browser session.
+
+<!-- https://9elements.github.io/fancy-border-radius/#60.23.100.0--184.630 -->
