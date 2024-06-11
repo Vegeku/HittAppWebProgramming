@@ -143,6 +143,8 @@ function addWorkout() {
 }
 
 function cancelWorkout() {
+  el.error.textContent = '';
+  el.error.style.display = 'none';
   el.addWorkoutPage.close();
   listofExercises = {};
   el.workoutName.value = '';

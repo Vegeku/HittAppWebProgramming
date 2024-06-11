@@ -127,10 +127,10 @@ export class WorkoutCard extends HTMLElement {
     async showEdit() {
         const showEdit = this.shadow.querySelector('#showEdit');
         showEdit.showModal();
-        const addExercise = this.shadow.querySelectorAll('button')[0];
-        const addRest = this.shadow.querySelectorAll('button')[1];
-        const cancel = this.shadow.querySelectorAll('button')[3];
-        const save = this.shadow.querySelectorAll('button')[2];
+        const addExercise = this.shadow.querySelector("#addEx");
+        const addRest = this.shadow.querySelector("#addRest");
+        const cancel = this.shadow.querySelector("#cancel");
+        const save = this.shadow.querySelector("#save");
         const workoutName = this.shadow.querySelector('#workoutName');
         const workoutDiff = this.shadow.querySelector('.level');
         const totalTime = this.shadow.querySelector('#totalTime');
@@ -225,6 +225,9 @@ export class WorkoutCard extends HTMLElement {
 
     async cancel() {
         const cancel = this.shadow.querySelector('#showEdit');
+        const error = this.shadow.querySelector('#error');
+        error.textContent = '';
+        error.style.display = 'none';
         this.fullWorkout = await this.getFullWorkout();
         cancel.close();
         this.showReadonly();

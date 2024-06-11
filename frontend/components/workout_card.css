@@ -16,14 +16,12 @@ p {
   padding: 0;
 }
 
-#send,
 button {
-    border-radius: 0.8rem 0.8rem 0 0;
+    margin: 0.5rem;
     font-size: 1rem;
-    height: 2rem;
-    width: 2rem;
-    padding: 0;
-    border-radius: 50%;
+    border-radius: 0.8rem 0.8rem 0 0;
+    height:4rem;
+    width: 16rem;
     --button-color: #4F4F4F;
     background-color: var(--button-color);
     border: none;
@@ -31,6 +29,45 @@ button {
     cursor: pointer;
     overflow: hidden;
     font-weight: 500;
+}
+
+#cancel, #edit , #start  {
+  border: none;
+  height: 2rem;
+  width: 2rem;
+  padding: 0;
+  border-radius: 50%;
+  margin: 0;
+}
+
+#cancel {
+  display: flex;
+  justify-self: end;
+}
+
+#cancel:hover,#start:hover,#edit:hover,
+button:hover {
+    background-color: var(--button-color);
+    opacity: 0.9;
+}
+
+#cancel:active,#start:active,#edit:active,
+button:active {
+    opacity: 0.6;
+}
+
+#cancel:disabled,#start:disabled,#edit:disabled,
+button:disabled {
+    opacity: 0.3;
+}
+
+#cancel>*, #edit > *, #start > * {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  color: #fff;
 }
 
 #error {
@@ -89,44 +126,6 @@ dialog {
     --secondary-colour: #3185FC; 
     background: linear-gradient(to bottom, var(--background-colour), var(--secondary-colour) 250%);
     border: 0;
-}
-
-dialog>button {
-    margin: 0.5rem;
-    border-radius: 0.8rem 0.8rem 0 0;
-    height:4rem;
-    width: 16rem;
-}
-
-#edit , #start  {
-  background-color: var(--button-color);
-  /* background-color: transparent; */
-  border: none;
-}
-
-#start:hover,#edit:hover,#send:hover,
-button:hover {
-    background-color: var(--button-color);
-    opacity: 0.9;
-}
-
-#start:active,#edit:active,#send:active,
-button:active {
-    opacity: 0.6;
-}
-
-#start:disabled,#edit:disabled,#send:disabled,
-button:disabled {
-    opacity: 0.3;
-}
-
-#edit > *, #start > * {
-  display: inline-flex;
-  align-items: center;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  color: #fff;
 }
 
 header.item-info>* {

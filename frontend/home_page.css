@@ -1,5 +1,3 @@
-
-
 * {
     text-align: center;
     font-family: sans-serif;
@@ -7,7 +5,7 @@
 
 .one-row {
     display: flex;
-    gap: 1rem;    
+    gap: 1rem;
     justify-content: center;
     padding: 1rem;
 }
@@ -23,7 +21,7 @@ p {
 
 #weight {
     font-size: 10em;
-    color:white ;
+    color: white;
 }
 
 #duration {
@@ -56,14 +54,19 @@ body {
 
 #diff {
     font-size: 2em;
-    color:var(--background-colour) ;
-}
-
-input, select, textarea{
     color: var(--background-colour);
 }
 
-header>*,label,p,button {
+input,
+select,
+textarea {
+    color: var(--background-colour);
+}
+
+header>*,
+label,
+p,
+button {
     color: white;
 }
 
@@ -94,7 +97,6 @@ h1 {
     top: 1em;
 }
 
-#send,
 button {
     border-radius: 0.8rem 0.8rem 0 0;
     font-size: 1rem;
@@ -108,18 +110,15 @@ button {
     font-weight: 500;
 }
 
-#send:hover,
 button:hover {
     background-color: var(--button-color);
     opacity: 0.9;
 }
 
-#send:active,
 button:active {
     opacity: 0.8;
 }
 
-#send:disabled,
 button:disabled {
     opacity: 0.5;
 }
@@ -150,24 +149,49 @@ dialog {
 dialog>button {
     margin: 0.5rem;
     border-radius: 0.8rem 0.8rem 0 0;
-    height:4rem;
+    height: 4rem;
     width: 16rem;
 }
 
-
-#workout>button {
+#workout>#addExercise, #workout>#addRest, #workout>#saveWorkout {
     width: 16rem;
     margin: 0.5rem;
 }
 
+
+#cancelWorkout {
+    display: flex;
+    justify-self: end;
+    border: none;
+    height: 2rem;
+    width: 2rem;
+    padding: 0;
+    border-radius: 50%;
+    margin: 0;
+}
+
+#cancelWorkout>* {
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    color: #fff;
+}
+
+#addWorkout {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+}
+
 .highlight {
-    background-color: var(--secondary-colour);
+    background-color: #3185FC;
 }
 
 @media (max-width: 38em) {
     ul {
         display: grid;
-
         grid-template-columns: none;
         grid-template-rows: 1fr;
     }
@@ -175,4 +199,14 @@ dialog>button {
     #pause-gif {
         width: 25rem;
     }
-} 
+
+    #addWorkout {
+        position: sticky; 
+        bottom: 1rem;
+        text-align: center;
+        /* bottom:0; 
+        right:0;
+        margin: 1rem; */
+        float: right;
+    }
+}
