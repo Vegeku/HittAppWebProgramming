@@ -24,7 +24,6 @@ A full-stack web application for creating, managing, and executing High-Intensit
 1. Clone the repository:
 ```bash
 git clone https://github.com/Vegeku/HittAppWebProgramming.git
-cd HittAppWebProgramming
 ```
 
 2. Install dependencies:
