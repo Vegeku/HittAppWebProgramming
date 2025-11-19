@@ -7,68 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<style>
-    li {
-        list-style: none;
-        background-color: #F1E4F3;
-        border-style: groove;
-        border-radius: 2rem;
-        padding: 1em;
-        margin: 1em;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr;
-        gap: 1rem;
-        flex-wrap: wrap;
-=======
-    }
 
-    @media (max-width: 600px) {
-        li {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-    }
-
-    p {
-        overflow-wrap: anywhere;
-    }
-
-
-    #send, #cancelExercise, button {
-        border-radius: 0.5rem;
-        font-size: 1rem;
-        height: 4rem;
-        padding: 0;
-        color: white;
-        --button-color: #1C3144;
-        background-color: var(--button-color);
-        border: none;
-        outline: none;
-        cursor: pointer;
-        overflow: hidden;
-        font-weight: 500;
-    }
-
-
-    .button__icon {
-        display: inline-flex;
-        align-items: center;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-        color: #fff;
-    }
-
-    #delete {
-        background-color: #9A031E;
-    }
-
-    #edit {
-        background-color: #134611;
-    }
-</style>
 
 <template id="addExercise">
     <p id="error">error</p>

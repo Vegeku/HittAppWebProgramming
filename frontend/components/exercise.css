@@ -1,0 +1,332 @@
+/* General Styles */
+:root {
+    --primary-color: #7C7C7C; /* Green color for primary accents */
+    --secondary-color: #2196F3; /* Blue color for secondary accents */
+    --text-color: white; /* Dark text color */
+    --font-family: sans-serif, 'Roboto'; /* Modern and readable font */
+  }
+  
+  body {
+    font-family: var(--font-family);
+    color: var(--text-color);
+    background-color: #f5f5f5; /* Light gray background */
+  }
+  
+  /* Typography */
+  p {
+    font-size: 1rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+  
+  /* Buttons */
+  #send,
+  button {
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--secondary-color);
+    color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    /* transition: background-color 0.3s ease; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.5rem;
+  }
+  
+  #send:hover,
+  button:hover {
+    background-color: #1976D2; /* Darker shade on hover */
+  }
+  
+  #send:active,
+  button:active {
+    opacity: 0.8;
+  }
+  
+  #send:disabled,
+  button:disabled {
+    background-color: #BDBDBD; /* Disabled button color */
+    cursor: not-allowed;
+  }
+  
+  .button__icon {
+    margin-right: 0.5rem;
+  }
+  
+  /* Lists */
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    gap: 1rem;
+    justify-content: center;
+    padding: 0;
+  }
+  
+  li {
+    list-style: none;
+    background-color: #F1E4F3;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    display: grid;
+    margin: 1rem;
+    align-items: center;
+  }
+  
+  /* Input Fields */
+  input,
+  select,
+  textarea {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    color: var(--text-color);
+  }
+  
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+  }
+  
+  /* Dialog */
+  dialog {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent backdrop */
+    border: none;
+    padding: 2rem;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  
+  dialog #infoInput {
+    background-color: #fff;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: grid;
+    gap: 1rem;
+  }
+  
+  #error {
+    display: none;
+    color: #F44336; /* Error message color */
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 600px) {
+    li {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(4, auto);
+    }
+  }
+
+/* #send,
+button {
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    height: 4rem;
+    padding: 0;
+    --button-color: #76949f;
+    background-color: var(--button-color);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    overflow: hidden;
+    font-weight: 500;
+}
+
+#send:hover,
+button:hover {
+    background-color: var(--button-color);
+    opacity: 0.9;
+}
+
+#send:active,
+button:active {
+    opacity: 0.8;
+}
+
+#send:disabled,
+button:disabled {
+    opacity: 0.5;
+}
+
+.button__text,
+.button__icon {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 1.8rem;
+    color: #fff;
+}
+
+ul {
+    display: grid;
+
+    grid-template-columns: repeat(auto-fill, 20em);
+    justify-content: center;
+}
+
+ul,
+li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+input,
+select,
+textarea {
+    color: #212529;
+}
+
+p,
+button {
+    color: white;
+}
+
+#diff {
+    color: var(--background-colour);
+}
+
+dialog {
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-colour);
+    border: 0;
+}
+
+dialog>button {
+    width: 16rem;
+}
+
+li {
+    list-style: none;
+    background-color: #F1E4F3;
+    border-style: groove;
+    border-radius: 2rem;
+    padding: 1em;
+    margin: 1em;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 40em) {
+    li {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    button {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .button__icon {
+        display: flex;
+        align-items: center;
+        width: fit-content;
+    }
+
+    button {
+        width: 4.2rem;
+    }
+
+    .button__text,
+    .button__icon {
+        display: inline-flex;
+        align-items: center;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        color: #fff;
+    }
+
+    .button__text {
+        padding: 1rem 0rem 0rem 0rem;
+        flex-direction: column
+    }
+
+    .item-info {
+        flex: 1 1 15em;
+        justify-self: center;
+    }
+} */
+
+
+
+
+/* <style>
+    li {
+        list-style: none;
+        background-color: #F1E4F3;
+        border-style: groove;
+        border-radius: 2rem;
+        padding: 1em;
+        margin: 1em;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    @media (max-width: 600px) {
+        li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    p {
+        overflow-wrap: anywhere;
+    }
+
+
+    #send, #cancelExercise, button {
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        height: 4rem;
+        padding: 0;
+        color: white;
+        --button-color: #1C3144;
+        background-color: var(--button-color);
+        border: none;
+        outline: none;
+        cursor: pointer;
+        overflow: hidden;
+        font-weight: 500;
+    }
+
+
+    .button__icon {
+        display: inline-flex;
+        align-items: center;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        color: #fff;
+    }
+
+    #delete {
+        background-color: #9A031E;
+    }
+
+    #edit {
+        background-color: #134611;
+    }

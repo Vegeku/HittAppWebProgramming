@@ -7,8 +7,11 @@ export class WorkoutCard extends HTMLElement {
     async connectedCallback() {
         this.shadow = this.attachShadow({ mode: 'open' });
         const templateURL = import.meta.url.replace('.js', '.html');
+        const styleURL = import.meta.url.replace('.js', '.css');
         this.templatePage = await fetch(templateURL);
-        this.shadow.innerHTML = await this.templatePage.text();
+        this.itemStyle = await fetch(styleURL);
+        this.shadow.innerHTML = (await this.templatePage.text());
+        this.shadow.innerHTML += `<style> ${await this.itemStyle.text()}  </style>`;
         this.fullWorkout = await this.getFullWorkout();
         this.showReadonly();
     }
@@ -70,6 +73,7 @@ export class WorkoutCard extends HTMLElement {
         if (workoutName !== '' && workoutDiff !== '' && Object.keys(this.fullWorkout).length > 0) {
             return true;
         } else {
+            error.style.display = 'block';
             return false;
         }
     }
@@ -123,10 +127,10 @@ export class WorkoutCard extends HTMLElement {
     async showEdit() {
         const showEdit = this.shadow.querySelector('#showEdit');
         showEdit.showModal();
-        const addExercise = this.shadow.querySelectorAll('button')[1];
-        const addRest = this.shadow.querySelectorAll('button')[2];
-        const cancel = this.shadow.querySelectorAll('button')[4];
-        const save = this.shadow.querySelectorAll('button')[3];
+        const addExercise = this.shadow.querySelector("#addEx");
+        const addRest = this.shadow.querySelector("#addRest");
+        const cancel = this.shadow.querySelector("#cancel");
+        const save = this.shadow.querySelector("#save");
         const workoutName = this.shadow.querySelector('#workoutName');
         const workoutDiff = this.shadow.querySelector('.level');
         const totalTime = this.shadow.querySelector('#totalTime');
@@ -221,6 +225,9 @@ export class WorkoutCard extends HTMLElement {
 
     async cancel() {
         const cancel = this.shadow.querySelector('#showEdit');
+        const error = this.shadow.querySelector('#error');
+        error.textContent = '';
+        error.style.display = 'none';
         this.fullWorkout = await this.getFullWorkout();
         cancel.close();
         this.showReadonly();
@@ -284,7 +291,10 @@ export class WorkoutCard extends HTMLElement {
         const name = this.shadow.querySelector('h4').textContent;
         const body = JSON.stringify({ name });
         const options = { method, headers, body };
-        await fetch(this.url, options);
+        const response = await fetch(this.url, options);
+        if (response.ok) {
+            location.reload();
+        }
     }
 
     async save() {

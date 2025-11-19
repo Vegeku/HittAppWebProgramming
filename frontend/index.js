@@ -8,9 +8,8 @@ async function loadWorkouts() {
   let workouts;
   if (response.ok) {
     workouts = await response.json();
+    noWorkouts(workouts);
     if (workouts.length !== 0) {
-      const info = document.querySelector('#info');
-      info.style.display = 'none';
       el.workoutList.replaceChildren();
       showWorkouts(workouts, el.workoutList);
     }
@@ -20,6 +19,7 @@ async function loadWorkouts() {
 }
 
 function showWorkouts(workouts, where) {
+  noWorkouts(workouts);
   for (const workout of workouts) {
     const li = document.createElement('li');
 
@@ -32,6 +32,14 @@ function showWorkouts(workouts, where) {
 
     li.append(em);
     where.append(li);
+  }
+}
+
+function noWorkouts(listOfWorkouts) {
+  if (listOfWorkouts.length === 0) {
+    el.info.style.display = 'block';
+  } else {
+    el.info.style.display = 'none';
   }
 }
 
@@ -75,6 +83,7 @@ async function saveWorkout() {
 
     if (response.ok) {
       cancelWorkout();
+      // el.info.style.display = 'none';
       listofExercises = {};
       const workoutsList = await response.json();
       el.workoutList.replaceChildren();
@@ -134,6 +143,8 @@ function addWorkout() {
 }
 
 function cancelWorkout() {
+  el.error.textContent = '';
+  el.error.style.display = 'none';
   el.addWorkoutPage.close();
   listofExercises = {};
   el.workoutName.value = '';
@@ -157,6 +168,7 @@ function loadElements() {
   el.nOfExercises = document.querySelector('#numberOfexercises');
   el.workoutDiff = document.querySelector('#level');
   el.workoutList = document.querySelector('#workouts');
+  el.info = document.querySelector('#info');
 }
 
 function addListeners() {

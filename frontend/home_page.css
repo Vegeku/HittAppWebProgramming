@@ -1,15 +1,39 @@
-
 * {
     text-align: center;
     font-family: sans-serif;
 }
 
-#weight {
-    font-size: 10em;
-    color: grey;
+.one-row {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    padding: 1rem;
 }
 
+p {
+    margin: 0;
+    padding: 0;
+}
 
+#info {
+    display: none;
+}
+
+#weight {
+    font-size: 10em;
+    color: white;
+}
+
+#duration {
+    font-size: 5rem;
+}
+
+#pause-gif {
+    display: none;
+    align-content: center;
+    width: auto;
+    height: auto;
+}
 
 #overview,
 #workoutPage {
@@ -24,8 +48,26 @@
 
 
 body {
-    --background-colour: #255f85;
-    background: linear-gradient(90deg, var(--background-colour), #acf7c1);
+    --background-colour: #212529;
+    background: var(--background-colour)
+}
+
+#diff {
+    font-size: 2em;
+    color: var(--background-colour);
+}
+
+input,
+select,
+textarea {
+    color: var(--background-colour);
+}
+
+header>*,
+label,
+p,
+button {
+    color: white;
 }
 
 
@@ -37,16 +79,15 @@ li {
 }
 
 li {
-    background-color: #F1E4F3;
+    background-image: url(/images/dumbell.png);
     border-style: groove;
-    border-radius: 0.8rem;
-    padding: 1em;
+    padding: 2rem 0 0 0;
+    border-radius: 0.8rem 0.8rem 0 0;
     margin: 1em;
 }
 
 h1 {
     background-color: var(--background-colour);
-    color: white;
     border-radius: 2rem;
 }
 
@@ -56,14 +97,11 @@ h1 {
     top: 1em;
 }
 
-#send,
 button {
-    border-radius: 0.5rem;
+    border-radius: 0.8rem 0.8rem 0 0;
     font-size: 1rem;
     height: 4rem;
-    padding: 0;
-    color: white;
-    --button-color: #1C3144;
+    --button-color: #4F4F4F;
     background-color: var(--button-color);
     border: none;
     outline: none;
@@ -72,19 +110,17 @@ button {
     font-weight: 500;
 }
 
-#send:hover,
 button:hover {
-    background-color: #001C3144;
+    background-color: var(--button-color);
+    opacity: 0.9;
 }
 
-#send:active,
 button:active {
-    background-color: #ff1C3144;
+    opacity: 0.8;
 }
 
-#send:disabled,
 button:disabled {
-    background-color: #b3cae0;
+    opacity: 0.5;
 }
 
 .button__text,
@@ -98,24 +134,79 @@ button:disabled {
 ul {
     display: grid;
 
-    grid-template-columns: repeat(auto-fill, 20em);
+    grid-template-columns: repeat(auto-fill, 22rem);
     justify-content: center;
 }
 
 dialog {
     width: 100%;
     height: 100%;
+    --secondary-colour: #3185FC;
+    background: linear-gradient(to bottom, var(--background-colour), var(--secondary-colour) 250%);
+    border: 0;
+}
+
+dialog>button {
+    margin: 0.5rem;
+    border-radius: 0.8rem 0.8rem 0 0;
+    height: 4rem;
+    width: 16rem;
+}
+
+#workout>#addExercise, #workout>#addRest, #workout>#saveWorkout {
+    width: 16rem;
+    margin: 0.5rem;
+}
+
+
+#cancelWorkout {
+    display: flex;
+    justify-self: end;
+    border: none;
+    height: 2rem;
+    width: 2rem;
+    padding: 0;
+    border-radius: 50%;
+    margin: 0;
+}
+
+#cancelWorkout>* {
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    color: #fff;
+}
+
+#addWorkout {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
 }
 
 .highlight {
-    background-color: darkblue;
+    background-color: #3185FC;
 }
 
 @media (max-width: 38em) {
     ul {
         display: grid;
-
         grid-template-columns: none;
         grid-template-rows: 1fr;
+    }
+
+    #pause-gif {
+        width: 25rem;
+    }
+
+    #addWorkout {
+        position: sticky; 
+        bottom: 1rem;
+        text-align: center;
+        /* bottom:0; 
+        right:0;
+        margin: 1rem; */
+        float: right;
     }
 }
